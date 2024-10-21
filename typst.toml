@@ -1,0 +1,15 @@
+[package]
+name = "lettre"
+version = "0.1"
+entrypoint = "src/lib.typ"
+authors = ["@Brndan"]
+license = " BSD-3-Clause"
+description = "French formal letter template"
+repository = "https://github.com/Sematre/typst-letter-pro"
+keywords = ["letter"]
+categories = ["office"]
+
+[template]
+path = "template/src"
+entrypoint = "exemple.typ"
+thumbnail = "template/thumbnail.png"
