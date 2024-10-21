@@ -19,6 +19,7 @@ destinataire: (
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
+pj: "",
 
 
 )

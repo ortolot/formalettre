@@ -23,6 +23,7 @@
     objet: [],
     date: [],
     lieu: [],
+    pj: [],
     doc,
 ) = {
     [
@@ -67,6 +68,12 @@
 
     set par(justify: true)
     doc
+    if pj != "" {
+        [
+            #v(1cm)
+            P. j. : #pj
+        ]
+    }
     set align(right + bottom)
     [
         #expediteur.first_name #smallcaps[#expediteur.name]
