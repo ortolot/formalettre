@@ -8,56 +8,60 @@
 )
 
 #let destinataire = (
-  title: "M. le recteur de l'académie d'Amiens",
-  street: "20, boulevard d'Alsace-Lorraine",
-  complement_adresse: "",
-  zipcode: "80000",
-  city: "Amiens",
+    title: [],
+    street: [],
+    complement_adresse: [],
+    zipcode: [],
+    city: [],
 )
 
 
 #let lettre(
-expediteur: expediteur,
-destinataire: destinataire,
-objet: [],
-date: [],
-doc,
+    expediteur: expediteur,
+    destinataire: destinataire,
+    objet: [],
+    date: [],
+    doc,
 ) = {
-
-  [#expediteur.first_name #smallcaps[#expediteur.name] \
-  #expediteur.street #h(1fr) #date \
-  ]
-  if expediteur.complement_adresse != "" {
     [
-        expediteur.complement_adresse 
+        #expediteur.first_name #smallcaps[#expediteur.name] \
+        #expediteur.street #h(1fr) #date \
     ]
-}
-[#expediteur.zipcode #expediteur.city]
-
-v(2cm)
-
-grid(
-  columns: (1fr, 7cm),
-  rows: (1.2em),
-  grid.cell(""),
-  [#destinataire.title \
-  #destinataire.street \
-  #if destinataire.complement_adresse != "" {
+    if expediteur.complement_adresse != "" {
+        [
+            expediteur.complement_adresse 
+        ]
+    }
     [
-    #destinataire.complement_adresse \
+        #expediteur.zipcode #expediteur.city
     ]
-}
-#destinataire.zipcode #destinataire.city],
 
-)
+    v(2cm)
 
-v(2cm)
+    grid(
+        columns: (1fr, 7cm),
+        rows: (1.2em),
+        grid.cell(""),
+        [
+            #destinataire.title \
+            #destinataire.street \
+            #if destinataire.complement_adresse != "" {
+                [
+                    #destinataire.complement_adresse \
+                ]
+            }
+            #destinataire.zipcode #destinataire.city
+        ],
+    )
 
-[*Objet : objet*]
+    v(2cm)
 
-set par(justify: true)
-doc
-set align(right + bottom)
-[#expediteur.first_name #smallcaps[#expediteur.name]
-] 
+    [*Objet : objet*]
+
+    set par(justify: true)
+    doc
+    set align(right + bottom)
+    [
+        #expediteur.first_name #smallcaps[#expediteur.name]
+    ] 
 }
