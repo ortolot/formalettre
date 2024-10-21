@@ -5,6 +5,8 @@
   complement_adresse: [],
   zipcode: [],
   city: [],
+  telephone: [],
+  email: [],
 )
 
 #let destinataire = (
@@ -32,13 +34,25 @@
     ]
     if expediteur.complement_adresse != "" {
         [
-            expediteur.complement_adresse 
+            #expediteur.complement_adresse
+            #linebreak()
         ]
     }
     [
         #expediteur.zipcode #expediteur.city
     ]
-
+    if expediteur.telephone != "" {
+        [
+            #linebreak()
+            tél. : #raw(expediteur.telephone)
+        ]
+    }
+    if expediteur.email != "" {
+        [
+            #linebreak()
+            email: #link("mailto:" + expediteur.email)[#raw(expediteur.email)]
+        ]
+    }
     v(1cm)
 
     grid(

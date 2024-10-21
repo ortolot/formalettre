@@ -1,4 +1,7 @@
 #import "lib.typ": lettre
+
+#set text(lang: "fr")
+
 #show: lettre.with(
 expediteur: (
   name: "de La Boétie",
@@ -7,6 +10,8 @@ expediteur: (
   complement_adresse: "",
   zipcode: "33320",
   city: "Le Taillan-Médoc",
+  telephone: "01 23 45 67 89",
+  email: "etienne@laboetie.org",
 ),
 destinataire: (
   title: "Michel de Montaigne",
@@ -24,4 +29,4 @@ pj: "",
 
 )
 
-#lorem(100)
+#lorem(200)
