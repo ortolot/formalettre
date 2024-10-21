@@ -7,6 +7,7 @@
   city: [],
   telephone: [],
   email: [],
+  signature: "",
 )
 
 #let destinataire = (
@@ -56,7 +57,7 @@
     v(1cm)
 
     grid(
-        columns: (1fr, 7cm),
+        columns: (1fr, 5cm),
         grid.cell(""),
         [
             #destinataire.title \
@@ -76,9 +77,11 @@
         ],
     )
 
-    v(2cm)
+    v(1.7cm)
 
     [*Objet : objet*]
+    
+    v(0.7cm)
 
     set par(justify: true)
     doc
@@ -88,8 +91,12 @@
             P. j. : #pj
         ]
     }
-    set align(right + bottom)
+    set align(right + horizon)
     [
         #expediteur.first_name #smallcaps[#expediteur.name]
-    ] 
+    ]
+    if expediteur.signature != "" {
+        v(-1cm)
+        image(expediteur.signature)
+    } 
 }
