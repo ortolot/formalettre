@@ -1,11 +1,12 @@
 [package]
-name = "lettre"
+name = "formalettre"
 version = "0.1"
 entrypoint = "src/lib.typ"
 authors = ["@Brndan"]
-license = " BSD-3-Clause"
+homepage = "https://github.com/Brndan/lettre"
+license = "BSD-3-Clause"
 description = "French formal letter template"
-repository = "https://github.com/Sematre/typst-letter-pro"
+repository = "https://github.com/Brndan/lettre"
 keywords = ["letter"]
 categories = ["office"]
 

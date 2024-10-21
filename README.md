@@ -1,4 +1,4 @@
-# Lettre : writing french letters with typst
+# Formalettre : writing french letters with typst
 
 
 
