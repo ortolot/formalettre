@@ -14,9 +14,11 @@ destinataire: (
   complement_adresse: "",
   zipcode: "55000",
   city: "Bar-le-Duc",
+  sc: "",
 ),
+lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
-date: [Le 7 juin 1559],
+date: [le 7 juin 1559],
 
 
 )

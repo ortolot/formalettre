@@ -2,7 +2,7 @@
   name: [],
   first_name: [],
   street: [],
-  complement_adresse: "",
+  complement_adresse: [],
   zipcode: [],
   city: [],
 )
@@ -13,6 +13,7 @@
     complement_adresse: [],
     zipcode: [],
     city: [],
+    sc: [],
 )
 
 
@@ -21,11 +22,12 @@
     destinataire: destinataire,
     objet: [],
     date: [],
+    lieu: [],
     doc,
 ) = {
     [
         #expediteur.first_name #smallcaps[#expediteur.name] \
-        #expediteur.street #h(1fr) #date \
+        #expediteur.street #h(1fr) #lieu, #date \
     ]
     if expediteur.complement_adresse != "" {
         [
@@ -36,11 +38,11 @@
         #expediteur.zipcode #expediteur.city
     ]
 
-    v(2cm)
+    v(1cm)
 
     grid(
         columns: (1fr, 7cm),
-        rows: (1.2em),
+        //rows: (1.2em),
         grid.cell(""),
         [
             #destinataire.title \
@@ -51,6 +53,12 @@
                 ]
             }
             #destinataire.zipcode #destinataire.city
+            #if destinataire.sc != "" {
+                [
+                    #v(1cm)
+                    s/c de #destinataire.sc \
+                ]
+            }
         ],
     )
 
