@@ -1,21 +1,21 @@
 #let expediteur = (
-  name: [],
-  first_name: [],
-  street: [],
+  nom: [],
+  prenom: [],
+  voie: [],
   complement_adresse: [],
-  zipcode: [],
-  city: [],
+  code_postal: [],
+  commune: [],
   telephone: [],
   email: [],
   signature: "",
 )
 
 #let destinataire = (
-    title: [],
-    street: [],
+    titre: [],
+    voie: [],
     complement_adresse: [],
-    zipcode: [],
-    city: [],
+    code_postal: [],
+    commune: [],
     sc: [],
 )
 
@@ -30,8 +30,8 @@
     doc,
 ) = {
     [
-        #expediteur.first_name #smallcaps[#expediteur.name] \
-        #expediteur.street #h(1fr) #lieu, #date \
+        #expediteur.prenom #smallcaps[#expediteur.nom] \
+        #expediteur.voie #h(1fr) #lieu, #date \
     ]
     if expediteur.complement_adresse != "" {
         [
@@ -40,7 +40,7 @@
         ]
     }
     [
-        #expediteur.zipcode #expediteur.city
+        #expediteur.code_postal #expediteur.commune
     ]
     if expediteur.telephone != "" {
         [
@@ -60,14 +60,14 @@
         columns: (1fr, 5cm),
         grid.cell(""),
         [
-            #destinataire.title \
-            #destinataire.street \
+            #destinataire.titre \
+            #destinataire.voie \
             #if destinataire.complement_adresse != "" {
                 [
                     #destinataire.complement_adresse \
                 ]
             }
-            #destinataire.zipcode #destinataire.city
+            #destinataire.code_postal #destinataire.commune
             #if destinataire.sc != "" {
                 [
                     #v(1cm)
@@ -93,7 +93,7 @@
     }
     set align(right + horizon)
     [
-        #expediteur.first_name #smallcaps[#expediteur.name]
+        #expediteur.prenom #smallcaps[#expediteur.nom]
     ]
     if expediteur.signature != "" {
         v(-1cm)
