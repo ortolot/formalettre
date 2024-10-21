@@ -42,7 +42,6 @@
 
     grid(
         columns: (1fr, 7cm),
-        //rows: (1.2em),
         grid.cell(""),
         [
             #destinataire.title \
