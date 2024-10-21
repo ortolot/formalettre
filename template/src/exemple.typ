@@ -1,4 +1,4 @@
-#import "lib.typ": lettre
+#import "@preview/formalettre:0.1.0": *
 
 #set text(lang: "fr")
 
