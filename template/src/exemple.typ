@@ -12,7 +12,7 @@ expediteur: (
   commune: "Le Taillan-Médoc",
   telephone: "01 23 45 67 89",
   email: "etienne@laboetie.org",
-  signature: true, // indiquez true si ajout d’une image comme signature
+  signature: false, // indiquez true si ajout d’une image comme signature
 ),
 destinataire: (
   titre: "Michel de Montaigne",
