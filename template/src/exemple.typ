@@ -1,4 +1,4 @@
-#import "@preview/formalettre:0.1.0": *
+#import "@preview/formalettre:0.1.1": *
 
 #set text(lang: "fr")
 
@@ -12,7 +12,7 @@ expediteur: (
   commune: "Le Taillan-Médoc",
   telephone: "01 23 45 67 89",
   email: "etienne@laboetie.org",
-  signature: "",
+  signature: true, // indiquez true si ajout d’une image comme signature
 ),
 destinataire: (
   titre: "Michel de Montaigne",
@@ -30,4 +30,10 @@ pj: "",
 
 )
 
+// Le corps du document remplace cette fonction
 #lorem(200)
+
+
+// Décommenter ces deux lignes pour ajouter la signature sous forme d’image
+//#set align(right + horizon)
+//#image("Signature.png")

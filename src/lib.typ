@@ -7,7 +7,7 @@
   commune: [],
   telephone: [],
   email: [],
-  signature: "",
+  signature: false,
 )
 
 #let destinataire = (
@@ -91,12 +91,11 @@
             P. j. : #pj
         ]
     }
-    set align(right + horizon)
+set align(right + horizon)
+    if expediteur.signature == true {
+        v(-3cm)
+    }
     [
         #expediteur.prenom #smallcaps[#expediteur.nom]
     ]
-    if expediteur.signature != "" {
-        v(-1cm)
-        image(expediteur.signature)
-    } 
 }
