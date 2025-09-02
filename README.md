@@ -14,14 +14,15 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 
 ### Expéditeur 
 
-- `expediteur.nom` : nom de famille de l'expéditeur·ice, **requis**.
 - `expediteur.prenom` : prénom de l'expéditeur·ice, **requis**.
+- `expediteur.nom` : nom de famille de l'expéditeur·ice, **requis**.
 - `expediteur.voie` : numéro de voie et nom de la voie, **requis**.
 - `expediteur.complement_adresse` : la seconde ligne parfois requise dans une adresse, *facultatif*.
 - `expediteur.code_postal` : code postal, **requis**.
 - `expediteur.commune` : commune de l'expéditeur·ice, **requis**.
--  `expediteur.telephone` : numéro de téléphone. Le format est libre et l'affichage en police mono. *Facultatif*.
--  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Facultatif*
+- `expediteur.pays` : pays de l'expéditeur⋅ice, *facultatif*.
+-  `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
+-  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
 - `expediteur.signature` : peut être `true` ou `false`, par défaut `false`. Prévient le paquet qu’une image de signature sera ajoutée, de manière à organiser la superposition de la signature et du nom apposé en fin de courrier.
 
 ## Destinataire
@@ -30,7 +31,8 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `destinataire.voie` : numéro de voie et nom de la voie, **requis**.
 - `destinataire.complement_adresse` : la seconde ligne parfois requise dans une adresse, *facultatif*.
 - `destinataire.code_postal` : code postal, **requis**.
-- `destinataire.commune` : commune de l'expéditeur·ice, **requis**.
+- `destinataire.commune` : commune du ou de la destinataire, **requis**.
+- `destinataire.pays` : pays du ou de la destinataire, *facultatif*.
 - `destinataire.sc` : si le courrier est envoyé “sous couvert” d'une hiérarchie intermédiaire, spécifier cette autorité. *Facultatif*.
 
 ## Lettre
