@@ -10,8 +10,8 @@ expediteur: (
   complement_adresse: "",
   code_postal: "33320",
   commune: "Le Taillan-Médoc",
-  telephone: "01 23 45 67 89",
-  email: "etienne@laboetie.org",
+  telephone: "01 99 00 67 89",
+  email: "etienne@laboetie.example",
   signature: false, // indiquez true si ajout d’une image comme signature
 ),
 destinataire: (
