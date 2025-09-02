@@ -30,15 +30,12 @@
     doc,
 ) = {
     [
-        #expediteur.prenom #smallcaps[#expediteur.nom] \
+        #expediteur.prenom #smallcaps(expediteur.nom) \
         #expediteur.voie #h(1fr) #lieu, #date \
     ]
-    if expediteur.at("complement_adresse", default: "") != "" {
-        [
-            #expediteur.complement_adresse
-            #linebreak()
-        ]
-    }
+    if expediteur.at("complement_adresse", default: "") != "" [
+        #expediteur.complement_adresse \
+    ]
     [
         #expediteur.code_postal #expediteur.commune
     ]
@@ -46,18 +43,14 @@
         linebreak()
         smallcaps(expediteur.pays)
     }
-    if expediteur.at("telephone", default: "") != "" {
-        [
-            #linebreak()
-            tél. : #raw(expediteur.telephone)
-        ]
-    }
-    if expediteur.at("email", default: "") != "" {
-        [
-            #linebreak()
-            email : #link("mailto:" + expediteur.email)[#raw(expediteur.email)]
-        ]
-    }
+    if expediteur.at("telephone", default: "") != "" [
+        #linebreak()
+        tél. : #raw(expediteur.telephone)
+    ]
+    if expediteur.at("email", default: "") != "" [
+        #linebreak()
+        email : #link("mailto:" + expediteur.email, raw(expediteur.email))
+    ]
     v(1cm)
 
     grid(
@@ -66,18 +59,14 @@
         [
             #destinataire.titre \
             #destinataire.voie \
-            #if destinataire.at("complement_adresse", default: "") != "" {
-                [
-                    #destinataire.complement_adresse \
-                ]
-            }
+            #if destinataire.at("complement_adresse", default: "") != "" [
+                #destinataire.complement_adresse \
+            ]
             #destinataire.code_postal #destinataire.commune
-            #if destinataire.at("sc", default: "") != "" {
-                [
-                    #v(1cm)
-                    s/c de #destinataire.sc \
-                ]
-            }
+            #if destinataire.at("sc", default: "") != "" [
+                #v(1cm)
+                s/c de #destinataire.sc \
+            ]
         ],
     )
 
