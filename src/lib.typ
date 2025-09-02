@@ -45,7 +45,9 @@
     }
     if expediteur.at("telephone", default: "") != "" [
         #linebreak()
-        tél. : #raw(expediteur.telephone)
+        tél. : #link(
+            "tel:"+ expediteur.telephone.replace(" ", "-"),
+            expediteur.telephone)
     ]
     if expediteur.at("email", default: "") != "" [
         #linebreak()
