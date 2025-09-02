@@ -33,7 +33,7 @@
         #expediteur.prenom #smallcaps[#expediteur.nom] \
         #expediteur.voie #h(1fr) #lieu, #date \
     ]
-    if expediteur.complement_adresse != "" {
+    if expediteur.at("complement_adresse", default: "") != "" {
         [
             #expediteur.complement_adresse
             #linebreak()
@@ -42,13 +42,17 @@
     [
         #expediteur.code_postal #expediteur.commune
     ]
-    if expediteur.telephone != "" {
+    if expediteur.at("pays", default: "") != "" {
+        linebreak()
+        smallcaps(expediteur.pays)
+    }
+    if expediteur.at("telephone", default: "") != "" {
         [
             #linebreak()
             tél. : #raw(expediteur.telephone)
         ]
     }
-    if expediteur.email != "" {
+    if expediteur.at("email", default: "") != "" {
         [
             #linebreak()
             email : #link("mailto:" + expediteur.email)[#raw(expediteur.email)]
@@ -62,13 +66,13 @@
         [
             #destinataire.titre \
             #destinataire.voie \
-            #if destinataire.complement_adresse != "" {
+            #if destinataire.at("complement_adresse", default: "") != "" {
                 [
                     #destinataire.complement_adresse \
                 ]
             }
             #destinataire.code_postal #destinataire.commune
-            #if destinataire.sc != "" {
+            #if destinataire.at("sc", default: "") != "" {
                 [
                     #v(1cm)
                     s/c de #destinataire.sc \
@@ -92,7 +96,7 @@
         ]
     }
 set align(right + horizon)
-    if expediteur.signature == true {
+    if expediteur.at("signature", default: false) == true {
         v(-3cm)
     }
     [
