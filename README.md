@@ -38,6 +38,8 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `objet` : l'objet du courrier, **requis**.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
+- `appel` : formule d'appel, autrement dit formule initiale, par défaut « Madame, Monsieur, ». On peut mettre une chaîne vide pour désactiver sa mise en place. *Facultatif*.
+- `salutation` : formule de salutation, autrement dit formule finale, par défaut « Cordialement, ». On peut mettre une chaîne vide pour désactiver sa mise en place. *Facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
 
 ```

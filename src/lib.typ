@@ -26,6 +26,8 @@
     objet: [],
     date: [],
     lieu: [],
+    appel: "Madame, Monsieur,",
+    salutation: "Cordialement,",
     pj: [],
     doc,
 ) = {
@@ -84,7 +86,19 @@
     v(0.7cm)
 
     set par(justify: true)
+
+    if appel != "" {
+        appel
+        v(1em)
+    }
+
     doc
+
+    if salutation != "" {
+        v(1em)
+        salutation
+    }
+
     if pj != "" {
         [
             #v(1cm)
