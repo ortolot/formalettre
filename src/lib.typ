@@ -72,7 +72,7 @@
             #destinataire.code_postal #destinataire.commune
             #if destinataire.sc != "" {
                 [
-                    #v(1cm)
+                    #v(2.5em)
                     s/c de #destinataire.sc \
                 ]
             }
@@ -83,7 +83,7 @@
 
     [*Objet : #objet*]
     
-    v(0.7cm)
+    v(1.8em)
 
     set par(justify: true)
 
@@ -101,7 +101,7 @@
 
     if pj != "" {
         [
-            #v(1cm)
+            #v(2.5em)
             P. j. : #pj
         ]
     }
