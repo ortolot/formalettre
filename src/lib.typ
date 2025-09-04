@@ -26,8 +26,8 @@
     objet: [],
     date: [],
     lieu: [],
-    appel: "Madame, Monsieur,",
-    salutation: "Cordialement,",
+    appel: "",
+    salutation: "",
     pj: [],
     doc,
 ) = {
