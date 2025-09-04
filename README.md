@@ -41,6 +41,7 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
+- `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 
 ```
 pj: [

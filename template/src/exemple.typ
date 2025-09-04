@@ -21,6 +21,7 @@ destinataire: (
   code_postal: "55000",
   commune: "Bar-le-Duc",
   sc: "",
+  marque_pliage: false, // indiquez true pour imprimer une marque de pliage
 ),
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],

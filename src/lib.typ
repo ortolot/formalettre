@@ -29,6 +29,7 @@
     date: [],
     lieu: [],
     pj: [],
+    marque_pliage: false,
     doc,
 ) = {
     // expediteur.prenom is required
@@ -163,6 +164,12 @@
             grid.cell(colspan: 4, []), // filler #5
         )
     )
+
+    if marque_pliage {
+        place(
+            top + left, dx: -25mm, dy: 74mm,
+            line(length: 1cm, stroke: .1pt))
+    }
 
     v(1em)
     [*Objet : #objet*]
