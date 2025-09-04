@@ -140,20 +140,41 @@
 
     if enveloppe != none {
         let format = parse_format(enveloppe)
+
         pagebreak()
+
         set page(
             width: format.width, height: format.height,
             margin: (left: 1cm, top: 1cm, rest: 2cm))
+
         // Set text size to an appropriate value for the chosen envelope
         // size. It must grow with the envelope size, but not too much
         // to avoid getting weirdly bit font with the largest formats.
         // Square root seems to give an appropriate growth rate. It has
         // been adjusted for using 11pt with the smallest, c6 envelope.
         set text(size: calc.sqrt(format.height.cm() / 11) * 11pt)
+
+        // We use the following grid layout:
+        // ┌──────────────────────────────────────────┐ ┐
+        // │                  margin                  │ │ 25 mm
+        // │   ┌──────────────────────────────────┐   │ ┤
+        // │   │ Sender                           │   │ │
+        // │   │ Address                          │   │ │
+        // │   │                                  │   │ │ 6fr
+        // │   │                                  │   │ │
+        // │   │                                  │   │ │
+        // │   ├──────────────┬──────────────┬────┤   │ ┤
+        // │   │    filler    │ Recipient    │ f. │   │ │ auto
+        // │   │    #1        │ Address      │ #2 │   │ │
+        // │   ├──────────────┴──────────────┴────┤   │ ┤
+        // │   │            filler #3             │   │ │ 1fr
+        // └───┴──────────────────────────────────┴───┘ ┘
+        // └───┴──────────────┴──────────────┴────┴───┘
+        //  25mm      3fr           auto      1fr  25mm
         grid(
             columns: (3fr, auto, 1fr),
             rows: (6fr, auto, 1fr),
-            grid.cell(colspan: 3)[
+            grid.cell(colspan: 3)[  // sender block
                 #set align(left + top)
                 Expéditeur :\
                 #expediteur.prenom #expediteur.nom \
@@ -163,8 +184,8 @@
                 ]
                 #expediteur.code_postal #expediteur.commune
             ],
-            grid.cell[],
-            grid.cell[
+            grid.cell[],  // filler #1
+            grid.cell[    // recipient block
                 #set align(left + horizon)
                 Destinataire :\
                 #destinataire.titre \
@@ -174,8 +195,8 @@
                 ]
                 #expediteur.code_postal #expediteur.commune
             ],
-            grid.cell[],
-            grid.cell(colspan: 3, [])
+            grid.cell[],               // filler #2
+            grid.cell(colspan: 3, [])  // filler #3
         )
     }
 }
