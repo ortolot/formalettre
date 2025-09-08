@@ -243,9 +243,10 @@
     }
 
     v(1em)
-    [*Objet : #objet*]
-    
-    v(1.8em)
+    if objet != "" and objet != [] [
+        *Objet : #objet*
+        #v(1.8em)
+    ]
 
     set par(justify: true)
 

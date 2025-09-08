@@ -37,7 +37,7 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 
 ### Lettre
 
-- `objet` : l'objet du courrier, **requis**.
+- `objet` : l'objet du courrier, *facultatif*.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
 - `appel` : formule d'appel, autrement dit formule initiale, désactivée par défaut. *Facultatif*.
