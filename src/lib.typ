@@ -28,6 +28,8 @@
     objet: [],
     date: [],
     lieu: [],
+    appel: "",
+    salutation: "",
     pj: [],
     marque_pliage: false,
     doc,
@@ -155,7 +157,7 @@
                 ]
                 #destinataire.code_postal #destinataire.commune
                 #if destinataire.sc != "" and destinataire.sc != [] [
-                    #v(1cm)
+                    #v(2.5em)
                     s/c de #destinataire.sc \
                 ]
             ],
@@ -174,13 +176,25 @@
     v(1em)
     [*Objet : #objet*]
     
-    v(0.7cm)
+    v(1.8em)
 
     set par(justify: true)
+
+    if appel != "" {
+        appel
+        v(1em)
+    }
+
     doc
+
+    if salutation != "" {
+        v(1em)
+        salutation
+    }
+
     if pj != "" and pj != [] {
         [
-            #v(1cm)
+            #v(2.5em)
             P. j. : #pj
         ]
     }

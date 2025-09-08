@@ -40,6 +40,8 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `objet` : l'objet du courrier, **requis**.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
+- `appel` : formule d'appel, autrement dit formule initiale, désactivée par défaut. *Facultatif*.
+- `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
 - `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 
