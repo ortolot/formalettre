@@ -193,6 +193,10 @@
                     #destinataire.complement_adresse \
                 ]
                 #destinataire.code_postal #destinataire.commune
+                #if destinataire.pays != "" and destinataire.pays != [] {
+                    linebreak()
+                    smallcaps(destinataire.pays)
+                }
                 #if destinataire.sc != "" and destinataire.sc != [] [
                     #v(2.5em)
                     s/c de #destinataire.sc \
