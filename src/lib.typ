@@ -91,34 +91,53 @@
 
     // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
     expediteur.adresse = [
-            #expediteur.prenom #smallcaps(expediteur.nom) \
-            #expediteur.voie \
-            #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
-                #expediteur.complement_adresse \
-            ]
-            #expediteur.code_postal #expediteur.commune
-            #if expediteur.pays != "" and expediteur.pays != [] {
-                linebreak()
-                smallcaps(expediteur.pays)
-            }
+        #expediteur.prenom #smallcaps(expediteur.nom) \
+        #expediteur.voie \
+        #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
+            #expediteur.complement_adresse \
+        ]
+        #expediteur.code_postal #expediteur.commune
+        #if expediteur.pays != "" and expediteur.pays != [] {
+            linebreak()
+            smallcaps(expediteur.pays)
+        }
     ]
+
+    // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
+    if expediteur.telephone == "" and expediteur.email == "" {
+        expediteur.coordonnees = []
+    }
+    else {
+        expediteur.coordonnees = {
+            if expediteur.telephone != "" [
+                tél. : #link(
+                    "tel:"+ expediteur.telephone.replace(" ", "-"),
+                    expediteur.telephone) \
+            ]
+            if expediteur.email != "" [
+                email : #link(
+                    "mailto:" + expediteur.email,
+                    raw(expediteur.email)) \
+            ]
+        }
+    }
 
     // Bloc d'adresse du destinataire, utilisable pour l'en-tête et l'enveloppe
     destinataire.adresse = [
-            #destinataire.titre \
-            #destinataire.voie \
-            #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
-                #destinataire.complement_adresse \
-            ]
-            #destinataire.code_postal #destinataire.commune
-            #if destinataire.pays != "" and destinataire.pays != [] {
-                linebreak()
-                smallcaps(destinataire.pays)
-            }
-            #if destinataire.sc != "" and destinataire.sc != [] [
-                #v(2.5em)
-                s/c de #destinataire.sc \
-            ]
+        #destinataire.titre \
+        #destinataire.voie \
+        #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
+            #destinataire.complement_adresse \
+        ]
+        #destinataire.code_postal #destinataire.commune
+        #if destinataire.pays != "" and destinataire.pays != [] {
+            linebreak()
+            smallcaps(destinataire.pays)
+        }
+        #if destinataire.sc != "" and destinataire.sc != [] [
+            #v(2.5em)
+            s/c de #destinataire.sc \
+        ]
     ]
 
     // An windowed enveloppe looks like this:
@@ -187,16 +206,9 @@
             grid.cell(rowspan: 4,  // sender address and contact info
                 [
                     #expediteur.adresse
-                    #if expediteur.telephone != "" [
-                        #linebreak()
-                        tél. : #link(
-                            "tel:"+ expediteur.telephone.replace(" ", "-"),
-                            expediteur.telephone)
-                    ]
-                    #if expediteur.email != "" [
-                        #linebreak()
-                        email : #link("mailto:" + expediteur.email, raw(expediteur.email))
-                    ]
+                    #if expediteur.coordonnees != [] {
+                        par(expediteur.coordonnees)
+                    }
                 ]
             ),
             grid.cell(colspan: 3,  // place and date
