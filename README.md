@@ -69,17 +69,13 @@ Par défaut, le prénom et le nom de l'expéditeur sont repris pour la signature
 
 On peut également inclure une image de signature numérisée avec l'option `image_signature`. Celle-ci prend un contenu libre, ce qui suffit à inclure simplement une image à sa taille naturelle `image("signature.png")` ou au besoin de régler sa taille et de l'espacer :
 
-```typm
-#show formalettre.with(
-    expediteur: (
-        prenom: "Étienne",
-        …,
-        image_signature: pad(
-            top: 10mm, bottom: 5mm,
-            image("signature.png", height: 3cm)
-        ),
+```typc
+expediteur: (
+    …,
+    image_signature: pad(
+        top: 10mm, bottom: 5mm,
+        image("signature.png", height: 3cm)
     ),
-    destinataire: (…),
 )
 ```
 
