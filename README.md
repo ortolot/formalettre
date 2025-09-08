@@ -43,15 +43,15 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `appel` : formule d'appel, autrement dit formule initiale, désactivée par défaut. *Facultatif*.
 - `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
-- `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 
-```
+```typc
 pj: [
 	+ Dossier n°1
 	+ Dossier n° 2
 	+ Attestation
 	]
 ```
+- `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 - `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 - `affranchissement` : fournir une chaîne (code d'affranchissement) ou un contenu tel que `image("timbre.png")` pour imprimer un affranchissement dans la zone idoine de l'enveloppe. *Facultatif*.
 
@@ -71,24 +71,12 @@ Les services postaux de plusieurs pays proposent des services en ligne d'affranc
 
 Le premier cas est le plus facile à intégrer sur une enveloppe générée par formalettre, en précisant :
 
-```typm
-#show formalettre.with(
-    expediteur: (…),
-    destinataire: (…),
-    …,
-    enveloppe: "dl", // ou autre format, p. ex. "c5"
-    affranchissement: "<code d'affranchissement>",
-)
+```typc
+affranchissement: "<code d'affranchissement>",
 ```
 
 Dans le second cas, les timbres à imprimer ne sont malheureusement pas fournis sous forme d'image individuelle, mais dans un document PDF à imprimer sur feuille A4, sur planche d'étiquette ou sur feuille A4. Pour l'intégrer à l'enveloppe générée par formalettre, vous devez alors en extraire une image correspondant au timbre seul, puis remplir ainsi les paramètres de formalettre :
 
-```typm
-#show formalettre.with(
-    expediteur: (…),
-    destinataire: (…),
-    …,
-    enveloppe: "dl", // ou autre format, p. ex. "c5"
-    affranchissement: image("timbre.png"),
-)
+```typc
+affranchissement: image("timbre.png"),
 ```
