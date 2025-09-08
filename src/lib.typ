@@ -69,6 +69,7 @@
     pj: [],
     marque_pliage: false,
     enveloppe: none,
+    affranchissement: none,
     doc,
 ) = {
     // expediteur.prenom is required
@@ -285,32 +286,44 @@
         set text(size: calc.sqrt(format.height.cm() / 11) * 11pt)
 
         // We use the following grid layout:
-        // ┌──────────────────────────────────────────┐ ┐
-        // │                  margin                  │ │ default margin
-        // │   ┌──────────────────────────────────┐   │ ┤
-        // │   │ Sender                           │   │ │
-        // │   │ Address                          │   │ │
-        // │   │                                  │   │ │ 6fr
-        // │   │                                  │   │ │
-        // │   │                                  │   │ │
-        // │   ├──────────────┬──────────────┬────┤   │ ┤
+        //              1fr              auto
+        //     ┌────────────────────┬─────────────┐
+        // ┌──────────────────────────────────────────┐
+        // │             default margin               │
+        // │   ┌────────────────────┬─────────────┐   │ ┐
+        // │   │ Sender             │             │   │ │
+        // │   │ Address            │             │   │ │
+        // │   │                    │             │   │ │ 6fr
+        // │   │                    │             │   │ │
+        // │   │                    │             │   │ │
+        // │   ├──────────────┬─────┴────────┬────┤   │ ┤
         // │   │    filler    │ Recipient    │ f. │   │ │ auto
         // │   │    #1        │ Address      │ #2 │   │ │
-        // │   ├──────────────┴──────────────┴────┤   │ ┤
-        // │   │            filler #3             │   │ │ default margin
-        // └───┴──────────────────────────────────┴───┘ ┘
-        // └───┴──────────────┴──────────────┴────┴───┘
-        //  def.      3fr           auto      1fr  def.
-        //  margin                                 margin
+        // │   ├──────────────┴──────────────┴────┤   │ ┘
+        // │   │            filler #3             │   │
+        // └───┴──────────────────────────────────┴───┘
+        //     └──────────────┴──────────────┴────┘
+        //            3fr           auto      1fr
         //
         grid(
             columns: (3fr, auto, 1fr),
             rows: (6fr, auto, 1fr),
-            grid.cell(colspan: 3)[     // sender block
-                #set align(left + top)
-                Expéditeur :\
-                #expediteur.adresse
-            ],
+            grid.cell(colspan: 3,      // sender + stamp line
+                grid(
+                    columns: (1fr, auto),
+                    grid.cell[         // sender block
+                        #set align(left + top)
+                        Expéditeur :\
+                        #expediteur.adresse
+                    ],
+                    grid.cell[         // stamp block
+                        #set align(right + top)
+                        #if affranchissement != none {
+                            affranchissement
+                        }
+                    ]
+                )
+            ),
             grid.cell[],               // filler #1
             grid.cell[                 // recipient block
                 #set align(left + horizon)
