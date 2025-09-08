@@ -52,6 +52,7 @@ pj: [
 	+ Attestation
 	]
 ```
+- `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 
 Le texte de la lettre proprement dite se situe après la configuration de la lettre.
 

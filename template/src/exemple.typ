@@ -29,8 +29,9 @@ date: [le 7 juin 1559],
 appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
 pj: "",
-
-
+envelope: none, // pour générer une page à imprimer sur enveloppe,
+                 // indiquez un format d'enveloppe, par exemple
+                 // "c4", "c5", "c6", "c56" ou "dl"
 )
 
 // Le corps du document remplace cette fonction
