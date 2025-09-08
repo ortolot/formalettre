@@ -89,6 +89,38 @@
     destinataire.pays = destinataire.at("pays", default: "")
     destinataire.sc = destinataire.at("sc", default: "")
 
+    // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
+    expediteur.adresse = [
+            #expediteur.prenom #smallcaps(expediteur.nom) \
+            #expediteur.voie \
+            #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
+                #expediteur.complement_adresse \
+            ]
+            #expediteur.code_postal #expediteur.commune
+            #if expediteur.pays != "" and expediteur.pays != [] {
+                linebreak()
+                smallcaps(expediteur.pays)
+            }
+    ]
+
+    // Bloc d'adresse du destinataire, utilisable pour l'en-tête et l'enveloppe
+    destinataire.adresse = [
+            #destinataire.titre \
+            #destinataire.voie \
+            #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
+                #destinataire.complement_adresse \
+            ]
+            #destinataire.code_postal #destinataire.commune
+            #if destinataire.pays != "" and destinataire.pays != [] {
+                linebreak()
+                smallcaps(destinataire.pays)
+            }
+            #if destinataire.sc != "" and destinataire.sc != [] [
+                #v(2.5em)
+                s/c de #destinataire.sc \
+            ]
+    ]
+
     // An windowed enveloppe looks like this:
     //                          220 mm
     //       ┌───────────────────────────────────────────┐
@@ -154,16 +186,7 @@
             rows: (20mm, 1fr, auto, 1fr, 20mm),
             grid.cell(rowspan: 4,  // sender address and contact info
                 [
-                    #expediteur.prenom #smallcaps(expediteur.nom) \
-                    #expediteur.voie \
-                    #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
-                        #expediteur.complement_adresse \
-                    ]
-                    #expediteur.code_postal #expediteur.commune
-                    #if expediteur.pays != "" and expediteur.pays != [] {
-                        linebreak()
-                        smallcaps(expediteur.pays)
-                    }
+                    #expediteur.adresse
                     #if expediteur.telephone != "" [
                         #linebreak()
                         tél. : #link(
@@ -184,27 +207,12 @@
                     #lieu, #date
                 ]
             ),
-            grid.cell(colspan: 3, []),  // filler #1
-            grid.cell[],                // filler #2
-            grid.cell[                  // sender address
-                #destinataire.titre \
-                #destinataire.voie \
-                #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
-                    #destinataire.complement_adresse \
-                ]
-                #destinataire.code_postal #destinataire.commune
-                #if destinataire.pays != "" and destinataire.pays != [] {
-                    linebreak()
-                    smallcaps(destinataire.pays)
-                }
-                #if destinataire.sc != "" and destinataire.sc != [] [
-                    #v(2.5em)
-                    s/c de #destinataire.sc \
-                ]
-            ],
-            grid.cell[],               // filler #3
-            grid.cell(colspan: 3, []), // filler #4
-            grid.cell(colspan: 4, []), // filler #5
+            grid.cell(colspan: 3, []),         // filler #1
+            grid.cell[],                       // filler #2
+            grid.cell[#destinataire.adresse],  // sender address
+            grid.cell[],                       // filler #3
+            grid.cell(colspan: 3, []),         // filler #4
+            grid.cell(colspan: 4, []),         // filler #5
         )
     )
 
@@ -285,26 +293,15 @@
         grid(
             columns: (3fr, auto, 1fr),
             rows: (6fr, auto, 1fr),
-            grid.cell(colspan: 3)[  // sender block
+            grid.cell(colspan: 3)[     // sender block
                 #set align(left + top)
                 Expéditeur :\
-                #expediteur.prenom #expediteur.nom \
-                #expediteur.voie \
-                #if expediteur.complement_adresse != "" [
-                    #expediteur.complement_adresse \
-                ]
-                #expediteur.code_postal #expediteur.commune
+                #expediteur.adresse
             ],
-            grid.cell[],  // filler #1
-            grid.cell[    // recipient block
+            grid.cell[],               // filler #1
+            grid.cell[                 // recipient block
                 #set align(left + horizon)
-                Destinataire :\
-                #destinataire.titre \
-                #destinataire.voie \
-                #if destinataire.complement_adresse != "" [
-                    #destinataire.complement_adresse \
-                ]
-                #expediteur.code_postal #expediteur.commune
+                #destinataire.adresse
             ],
             grid.cell[],               // filler #2
             grid.cell(colspan: 3, [])  // filler #3
