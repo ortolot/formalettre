@@ -8,7 +8,7 @@
   pays: [],
   telephone: "",  // string, not content: will be processed
   email: "",      // string, not content: will be processed
-  signature: false,
+  signature: "",
 )
 
 #let destinataire = (
@@ -81,7 +81,16 @@
     expediteur.pays = expediteur.at("pays", default: "")
     expediteur.telephone = expediteur.at("telephone", default: "")
     expediteur.email = expediteur.at("email", default: "")
-    expediteur.signature = expediteur.at("signature", default: false)
+    expediteur.signature = expediteur.at(
+        "signature",
+        default: [#expediteur.prenom #smallcaps(expediteur.nom)])
+    if type(expediteur.signature) == bool {
+        expediteur.signature = [
+            #v(-3cm)
+            #expediteur.prenom #smallcaps(expediteur.nom)
+        ]
+    }
+    expediteur.image_signature = expediteur.at("image_signature", default: [])
     // destinataire.titre is required
     // destinataire.voie is required
     destinataire.complement_adresse = destinataire.at("complement_adresse", default: "")
@@ -256,24 +265,39 @@
 
     doc
 
-    if salutation != "" {
-        v(1em)
-        salutation
-    }
+    block(
+        breakable: false,
+        {
+            if salutation != "" {
+                v(1em)
+                salutation
+            }
+
+            let hauteur_signature = 3cm
+            if expediteur.image_signature != [] {
+                hauteur_signature = auto
+            }
+
+            grid(
+                columns: (1fr, 1fr),
+                rows: (hauteur_signature, auto),
+                grid.cell(rowspan: 2)[],
+                grid.cell[
+                    #set align(center + horizon)
+                    #expediteur.image_signature
+                ],
+                grid.cell[
+                    #set align(center)
+                    #expediteur.signature
+                ]
+            )
+        }
+    )
 
     if pj != "" and pj != [] {
         [
             #v(2.5em)
             P. j. : #pj
-        ]
-    }
-    {
-        set align(right + horizon)
-        if expediteur.signature == true {
-            v(-3cm)
-        }
-        [
-            #expediteur.prenom #smallcaps[#expediteur.nom]
         ]
     }
 
