@@ -196,13 +196,20 @@
     // │   │            filler #5              │   │ │ 20 mm │
     // └───┴───────────────────────────────────┴───┘ ┘ ──────┘
     // └───┴───────────────┴───┴───────────┴───┴───┘
-    // 25mm│     75mm       1fr     auto    1fr│25mm
+    // 25mm│ 75mm = 46.875% 1fr     auto    1fr│25mm
     //     └───────────────────────────────────┘
     //                      100%
     //
+    // For the sender column, we use a percentage instead of a fixed length.
+    // That percentage has been computed to result in the same length with an
+    // A4 page using standard Typst margins. This allows us to produce a
+    // relevant layout even with page sizes othen than A4, e.g. letter or A5
+    // (although there will be no compatibility with windowed enveloppe with
+    // such a small format).
+    //
     block(width: 100%, height: 75mm, spacing: 0pt,
         grid(
-            columns: (75mm, 1fr, auto, 1fr),
+            columns: (46.875%, 1fr, auto, 1fr),
             rows: (20mm, 1fr, auto, 1fr, 20mm),
             grid.cell(rowspan: 4,  // sender address and contact info
                 [
