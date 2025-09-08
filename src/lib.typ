@@ -263,8 +263,7 @@
         pagebreak()
 
         set page(
-            width: format.width, height: format.height,
-            margin: (left: 1cm, top: 1cm, rest: 2cm))
+            width: format.width, height: format.height)
 
         // Set text size to an appropriate value for the chosen envelope
         // size. It must grow with the envelope size, but not too much
@@ -275,7 +274,7 @@
 
         // We use the following grid layout:
         // ┌──────────────────────────────────────────┐ ┐
-        // │                  margin                  │ │ 25 mm
+        // │                  margin                  │ │ default margin
         // │   ┌──────────────────────────────────┐   │ ┤
         // │   │ Sender                           │   │ │
         // │   │ Address                          │   │ │
@@ -286,10 +285,12 @@
         // │   │    filler    │ Recipient    │ f. │   │ │ auto
         // │   │    #1        │ Address      │ #2 │   │ │
         // │   ├──────────────┴──────────────┴────┤   │ ┤
-        // │   │            filler #3             │   │ │ 1fr
+        // │   │            filler #3             │   │ │ default margin
         // └───┴──────────────────────────────────┴───┘ ┘
         // └───┴──────────────┴──────────────┴────┴───┘
-        //  25mm      3fr           auto      1fr  25mm
+        //  def.      3fr           auto      1fr  def.
+        //  margin                                 margin
+        //
         grid(
             columns: (3fr, auto, 1fr),
             rows: (6fr, auto, 1fr),
