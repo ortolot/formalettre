@@ -58,6 +58,10 @@
     return format
 }
 
+#let not_empty(something) = {
+    something != "" and something != [] and something != none
+}
+
 #let lettre(
     expediteur: expediteur,
     destinataire: destinataire,
@@ -103,11 +107,11 @@
     expediteur.adresse = [
         #expediteur.prenom #smallcaps(expediteur.nom) \
         #expediteur.voie \
-        #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
+        #if not_empty(expediteur.complement_adresse) [
             #expediteur.complement_adresse \
         ]
         #expediteur.code_postal #expediteur.commune
-        #if expediteur.pays != "" and expediteur.pays != [] {
+        #if not_empty(expediteur.pays) {
             linebreak()
             smallcaps(expediteur.pays)
         }
@@ -136,15 +140,15 @@
     destinataire.adresse = [
         #destinataire.titre \
         #destinataire.voie \
-        #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
+        #if not_empty(destinataire.complement_adresse) [
             #destinataire.complement_adresse \
         ]
         #destinataire.code_postal #destinataire.commune
-        #if destinataire.pays != "" and destinataire.pays != [] {
+        #if not_empty(destinataire.pays) {
             linebreak()
             smallcaps(destinataire.pays)
         }
-        #if destinataire.sc != "" and destinataire.sc != [] [
+        #if not_empty(destinataire.sc) [
             #v(2.5em)
             s/c de #destinataire.sc \
         ]
