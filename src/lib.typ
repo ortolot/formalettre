@@ -70,7 +70,9 @@
     lieu: [],
     appel: "",
     salutation: "",
+    ps: [],
     pj: [],
+    cc: [],
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
@@ -298,11 +300,55 @@
         }
     )
 
-    if pj != "" and pj != [] {
-        [
-            #v(2.5em)
-            P. j. : #pj
-        ]
+    if not_empty(ps) or not_empty(pj) or not_empty(cc) {
+        let width = 2.5em
+        let mentions = ()
+
+        if not_empty(ps) and type(ps) == content or type(ps) == str {
+            mentions.push("P.-S.")
+            mentions.push(ps)
+        }
+        else if type(ps) == array {
+            width = 1.3em
+            let prefix = "S."
+            for item in ps {
+                width += 1.2em
+                prefix = "P.-" + prefix
+                mentions.push(prefix)
+                mentions.push(item)
+            }
+        }
+        else if type(ps) == dictionary {
+            for (prefix, item) in ps {
+                mentions.push(prefix)
+                mentions.push(item)
+            }
+        }
+
+        if not_empty(ps) and type(pj) == content or type(pj) == str {
+            mentions.push("P. j.")
+            mentions.push(pj)
+        }
+        else if type(pj) == array {
+            mentions.push("P. j.")
+            mentions.push(list(marker: [], body-indent: 0pt, ..pj))
+        }
+
+        if not_empty(cc) and type(cc) == content or type(cc) == str {
+            mentions.push("C. c.")
+            mentions.push(cc)
+        }
+        else if type(cc) == array {
+            mentions.push("C. c.")
+            mentions.push(list(marker: [], body-indent: 0pt, ..cc))
+        }
+
+        v(2.5em)
+        grid(
+            columns: (width, 1fr),
+            row-gutter: 1.5em,
+            ..mentions
+        )
     }
 
     if enveloppe != none {
