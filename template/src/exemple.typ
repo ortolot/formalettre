@@ -28,6 +28,9 @@ destinataire: (
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
+// Décommenter la ligne suivante pour afficher des informations d'envoi suivi
+// ou recommandé
+// envoi: [Lettre suivie numéro XXXXXXXX],
 appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
 pj: "",
