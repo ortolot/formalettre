@@ -30,7 +30,10 @@ objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
 appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
-pj: "",
+ps: "Au fait, notez bien notre prochain rendez-vous !"
+// Décommentez la ligne suivante pour préciser des pièces jointes
+// pj: ("Photo de famille", "Copie de mon dernier essai")
+cc: [],
 marque_pliage: false,   // indiquez true pour imprimer une marque de pliage
                         //
 enveloppe: none,        // indiquez un format d'enveloppe, par exemple
