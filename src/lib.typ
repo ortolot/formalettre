@@ -1,25 +1,22 @@
 #let expediteur = (
   nom: [],
-  prenom: [],
-  voie: [],
-  complement_adresse: [],
-  code_postal: [],
+  adresse: (),        // actually optional, see below
   commune: [],
-  pays: [],
-  telephone: "",  // string, not content: will be processed
-  email: "",      // string, not content: will be processed
-  signature: "",
+  // pays: [],        // optional
+  // telephone: "",   // string, not content: will be processed; optional
+  // email: "",       // string, not content: will be processed; optional
+  // signature: [],   // optional
 )
 
+
 #let destinataire = (
-    titre: [],
-    voie: [],
-    complement_adresse: [],
-    code_postal: [],
+    nom: [],
+    adresse: (),  // actually optional, see below
     commune: [],
-    pays: [],
-    sc: [],
+    // pays: [],  // optional
+    // sc: [],    // sous couvert; optional
 )
+
 
 // Known envelope formats
 #let formats_enveloppe = (
@@ -58,9 +55,25 @@
     return format
 }
 
+#let is_empty(something) = {
+    something == "" or something == [] or something == none
+}
+
 #let not_empty(something) = {
     something != "" and something != [] and something != none
 }
+
+
+#let bloc_adresse(personne) = [
+    #personne.nom \
+    #for ligne in personne.adresse [
+        #ligne \
+    ]
+    #personne.commune \
+    #if not_empty(personne.pays) [
+        #smallcaps(personne.pays) \
+    ]
+]
 
 #let lettre(
     expediteur: expediteur,
@@ -76,46 +89,79 @@
     affranchissement: none,
     doc,
 ) = {
-    // expediteur.prenom is required
+    // Convert legacy sender fields
+    if "prenom" in expediteur {
+        expediteur.nom = [#expediteur.remove("prenom") #smallcaps(expediteur.nom)]
+    }
+    if "voie" in expediteur {
+        expediteur.adresse = (expediteur.remove("voie"),)
+        if "complement_adresse" in expediteur and not_empty(expediteur.complement_adresse) {
+            expediteur.adresse.push(expediteur.remove("complement_adresse"))
+        }
+    }
+    if "code_postal" in expediteur {
+        expediteur.commune = [#expediteur.remove("code_postal") #expediteur.commune]
+    }
+
+    // Convert legacy recipient fields
+    if "titre" in destinataire {
+        destinataire.nom = destinataire.remove("titre")
+    }
+    if "voie" in destinataire {
+        destinataire.adresse = (destinataire.remove("voie"),)
+        if "complement_adresse" in destinataire and not_empty(destinataire.complement_adresse) {
+            destinataire.adresse.push(destinataire.remove("complement_adresse"))
+        }
+    }
+    if "code_postal" in destinataire {
+        destinataire.commune = [#destinataire.remove("code_postal") #destinataire.commune]
+    }
+
+    // Set default values for sender optional fields
     // expediteur.nom is required
-    expediteur.complement_adresse = expediteur.at("complement_adresse", default: "")
-    // expediteur.voie is required
-    // expediteur.code_postal is required
+    // expediteur.adresse is optional as there exist organization with only a
+    // name and a locality.
+    if "adresse" not in expediteur or is_empty(expediteur.adresse) {
+        expediteur.adresse = ()
+    }
+    // expediteur.adresse may alse be a simple string or content,
+    // convert it to a list
+    else if type(expediteur.adresse) == str or type(expediteur.adresse) == content {
+        expediteur.adresse = (expediteur.adresse,)
+    }
     // expediteur.commune is required
-    expediteur.pays = expediteur.at("pays", default: "")
-    expediteur.telephone = expediteur.at("telephone", default: "")
-    expediteur.email = expediteur.at("email", default: "")
+    expediteur.pays = expediteur.at("pays", default: none)
+    expediteur.telephone = expediteur.at("telephone", default: none)
+    expediteur.email = expediteur.at("email", default: none)
     expediteur.signature = expediteur.at(
         "signature",
-        default: [#expediteur.prenom #smallcaps(expediteur.nom)])
+        default: expediteur.nom)
     if type(expediteur.signature) == bool {
         expediteur.signature = [
             #v(-3cm)
-            #expediteur.prenom #smallcaps(expediteur.nom)
+            #expediteur.nom
         ]
     }
-    expediteur.image_signature = expediteur.at("image_signature", default: [])
-    // destinataire.titre is required
-    // destinataire.voie is required
-    destinataire.complement_adresse = destinataire.at("complement_adresse", default: "")
-    // destinataire.code_postal is required
+    expediteur.image_signature = expediteur.at("image_signature", default: none)
+
+    // Set default values for recipient-specific optional fields
+    // destinataire.nom is required
+    // destinataire.adresse is optional as there exist organization with only a
+    // name and a locality.
+    if "adresse" not in destinataire or is_empty(destinataire.adresse) {
+        destinataire.adresse = ()
+    }
+    // destinataire.adresse may alse be a simple string or content,
+    // convert it to a list
+    else if type(destinataire.adresse) == str or type(destinataire.adresse) == content {
+        destinataire.adresse = (destinataire.adresse,)
+    }
     // destinataire.commune is required
-    destinataire.pays = destinataire.at("pays", default: "")
-    destinataire.sc = destinataire.at("sc", default: "")
+    destinataire.pays = destinataire.at("pays", default: none)
+    destinataire.sc = destinataire.at("sc", default: none)
 
     // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
-    expediteur.adresse = [
-        #expediteur.prenom #smallcaps(expediteur.nom) \
-        #expediteur.voie \
-        #if not_empty(expediteur.complement_adresse) [
-            #expediteur.complement_adresse \
-        ]
-        #expediteur.code_postal #expediteur.commune
-        #if not_empty(expediteur.pays) {
-            linebreak()
-            smallcaps(expediteur.pays)
-        }
-    ]
+    expediteur.bloc_adresse = bloc_adresse(expediteur)
 
     // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
     if expediteur.telephone == "" and expediteur.email == "" {
@@ -137,17 +183,8 @@
     }
 
     // Bloc d'adresse du destinataire, utilisable pour l'en-tête et l'enveloppe
-    destinataire.adresse = [
-        #destinataire.titre \
-        #destinataire.voie \
-        #if not_empty(destinataire.complement_adresse) [
-            #destinataire.complement_adresse \
-        ]
-        #destinataire.code_postal #destinataire.commune
-        #if not_empty(destinataire.pays) {
-            linebreak()
-            smallcaps(destinataire.pays)
-        }
+    destinataire.bloc_adresse = [
+        #bloc_adresse(destinataire)
         #if not_empty(destinataire.sc) [
             #v(2.5em)
             s/c de #destinataire.sc \
@@ -226,7 +263,7 @@
             rows: (20mm, 1fr, auto, 1fr, 20mm),
             grid.cell(rowspan: 4,  // sender address and contact info
                 [
-                    #expediteur.adresse
+                    #expediteur.bloc_adresse
                     #if expediteur.coordonnees != [] {
                         par(expediteur.coordonnees)
                     }
@@ -240,12 +277,12 @@
                     #lieu, #date
                 ]
             ),
-            grid.cell(colspan: 3, []),         // filler #1
-            grid.cell[],                       // filler #2
-            grid.cell[#destinataire.adresse],  // sender address
-            grid.cell[],                       // filler #3
-            grid.cell(colspan: 3, []),         // filler #4
-            grid.cell(colspan: 4, []),         // filler #5
+            grid.cell(colspan: 3, []),              // filler #1
+            grid.cell[],                            // filler #2
+            grid.cell[#destinataire.bloc_adresse],  // sender address
+            grid.cell[],                            // filler #3
+            grid.cell(colspan: 3, []),              // filler #4
+            grid.cell(colspan: 4, []),              // filler #5
         )
     )
 
@@ -349,7 +386,7 @@
                     grid.cell[         // sender block
                         #set align(left + top)
                         Expéditeur :\
-                        #expediteur.adresse
+                        #expediteur.bloc_adresse
                     ],
                     grid.cell[         // stamp block
                         #set align(right + top)
@@ -362,7 +399,7 @@
             grid.cell[],               // filler #1
             grid.cell[                 // recipient block
                 #set align(left + horizon)
-                #destinataire.adresse
+                #destinataire.bloc_adresse
             ],
             grid.cell[],               // filler #2
             grid.cell(colspan: 3, [])  // filler #3
