@@ -63,15 +63,29 @@
     something != "" and something != [] and something != none
 }
 
+// (Small-)capitalize content if the capitalization level is above a minimum
+// value
+#let capitalise(cap_level, min_level, content) = {
+    let cap = smallcaps
+    if calc.fract(cap_level) != 0 {
+        cap = upper
+    }
+    if cap_level >= min_level {
+        return cap(content)
+    }
+    else {
+        return content
+    }
+}
 
-#let bloc_adresse(personne) = [
-    #personne.nom \
+#let bloc_adresse(personne, capitalisation: 0) = [
+    #capitalise(capitalisation, 3, personne.nom) \
     #for ligne in personne.adresse [
-        #ligne \
+        #capitalise(capitalisation, 2, ligne) \
     ]
-    #personne.commune \
+    #capitalise(capitalisation, 1, personne.commune) \
     #if not_empty(personne.pays) [
-        #smallcaps(personne.pays) \
+        #capitalise(capitalisation, 1, personne.pays) \
     ]
 ]
 
@@ -87,6 +101,7 @@
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
+    capitalisation: 0,
     doc,
 ) = {
     // Convert legacy sender fields
@@ -161,7 +176,7 @@
     destinataire.sc = destinataire.at("sc", default: none)
 
     // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
-    expediteur.bloc_adresse = bloc_adresse(expediteur)
+    expediteur.bloc_adresse = bloc_adresse(expediteur, capitalisation: capitalisation)
 
     // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
     if expediteur.telephone == "" and expediteur.email == "" {
@@ -184,11 +199,7 @@
 
     // Bloc d'adresse du destinataire, utilisable pour l'en-tête et l'enveloppe
     destinataire.bloc_adresse = [
-        #bloc_adresse(destinataire)
-        #if not_empty(destinataire.sc) [
-            #v(2.5em)
-            s/c de #destinataire.sc \
-        ]
+        #bloc_adresse(destinataire, capitalisation: capitalisation)
     ]
 
     // An windowed enveloppe looks like this:
@@ -261,14 +272,16 @@
         grid(
             columns: (46.875%, 1fr, auto, 1fr),
             rows: (20mm, 1fr, auto, 1fr, 20mm),
-            grid.cell(rowspan: 4,  // sender address and contact info
-                [
-                    #expediteur.bloc_adresse
-                    #if expediteur.coordonnees != [] {
-                        par(expediteur.coordonnees)
-                    }
-                ]
-            ),
+            grid.cell(rowspan: 4, {  // sender address and contact info
+                if enveloppe == none {
+                    bloc_adresse(expediteur, capitalisation: capitalisation)
+                } else {
+                    bloc_adresse(expediteur)
+                }
+                if expediteur.coordonnees != [] {
+                    par(expediteur.coordonnees)
+                }
+            }),
             grid.cell(colspan: 3,  // place and date
                 [
                     #set align(right)
@@ -279,7 +292,17 @@
             ),
             grid.cell(colspan: 3, []),              // filler #1
             grid.cell[],                            // filler #2
-            grid.cell[#destinataire.bloc_adresse],  // sender address
+            grid.cell({                             // sender address
+                if enveloppe == none {
+                    bloc_adresse(destinataire, capitalisation: capitalisation)
+                } else {
+                    bloc_adresse(destinataire)
+                }
+                if not_empty(destinataire.sc) [
+                    #v(2.5em)
+                    s/c de #destinataire.sc \
+                ]
+            }),
             grid.cell[],                            // filler #3
             grid.cell(colspan: 3, []),              // filler #4
             grid.cell(colspan: 4, []),              // filler #5
@@ -386,7 +409,7 @@
                     grid.cell[         // sender block
                         #set align(left + top)
                         Expéditeur :\
-                        #expediteur.bloc_adresse
+                        #bloc_adresse(expediteur, capitalisation: capitalisation)
                     ],
                     grid.cell[         // stamp block
                         #set align(right + top)
@@ -399,7 +422,7 @@
             grid.cell[],               // filler #1
             grid.cell[                 // recipient block
                 #set align(left + horizon)
-                #destinataire.bloc_adresse
+                #bloc_adresse(destinataire, capitalisation: capitalisation)
             ],
             grid.cell[],               // filler #2
             grid.cell(colspan: 3, [])  // filler #3

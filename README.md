@@ -50,6 +50,14 @@ pj: [
 - `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 - `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 - `affranchissement` : fournir une chaîne (code d'affranchissement) ou un contenu tel que `image("timbre.png")` pour imprimer un affranchissement dans la zone idoine de l'enveloppe. *Facultatif*.
+- `capitalisation` : indiquer un niveau de capitalisation des adresses, *facultatif* :
+  - 0 (défaut) : ne pas modifier les adresses fournies,
+  - 1 : mettre en petites majuscules les communes et pays,
+  - 1.5 : mettre en majuscules les communes et pays,
+  - 2 : mettre en petites majuscules les adresses, communes et pays,
+  - 2.5 : mettre en majuscules les adresses, communes et pays,
+  - 3 : mettre en petites majuscules l'ensemble des blocs d'adresses (noms, adresses, communes et pays),
+  - 3.5 : mettre en majuscules l'ensemble des blocs d'adresses (noms, adresses, communes et pays).
 
 Le texte de la lettre proprement dite se situe après la configuration de la lettre.
 

@@ -9,7 +9,9 @@ expediteur: (
   commune: [33320 Le Taillan-Médoc],
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
-  signature: "Étienne", // par défaut, reprend le prénom et le nom
+  // Décommenter la ligne suivante pour utiliser autre chose que le prénom et
+  // le nom dans la signature
+  // signature: "Étienne",
   // Décommenter la ligne suivante pour inclure l'image d'une signature
   // numérisée
   // image_signature: image("signature.png")
@@ -18,7 +20,9 @@ destinataire: (
   nom: [Michel de Montaigne],
   adresse: [17 butte Farémont],
   commune: [55000 Bar-le-Duc],
-  sc: "",
+  // Décommenter la ligne suivante pour include une mention s/c
+  // d'envoi par voie hiérarchique (sous couvert de)
+  // sc: "Quelqu'un",
 ),
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
