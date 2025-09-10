@@ -4,12 +4,9 @@
 
 #show: lettre.with(
 expediteur: (
-  prenom: "Étienne",
-  nom: "de La Boétie",
-  voie: "145 avenue de Germignan",
-  complement_adresse: "",
-  code_postal: "33320",
-  commune: "Le Taillan-Médoc",
+  nom: [Étienne #smallcaps[de la Boétie]],
+  adresse: [145 avenue de Germignan],
+  commune: [33320 Le Taillan-Médoc],
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
   signature: "Étienne", // par défaut, reprend le prénom et le nom
@@ -18,11 +15,9 @@ expediteur: (
   // image_signature: image("signature.png")
 ),
 destinataire: (
-  titre: "Michel de Montaigne",
-  voie: "17 butte Farémont",
-  complement_adresse: "",
-  code_postal: "55000",
-  commune: "Bar-le-Duc",
+  nom: [Michel de Montaigne],
+  adresse: [17 butte Farémont],
+  commune: [55000 Bar-le-Duc],
   sc: "",
 ),
 lieu: "Camp Germignan",

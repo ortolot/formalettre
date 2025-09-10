@@ -14,12 +14,9 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 
 ### Expéditeur 
 
-- `expediteur.prenom` : prénom de l'expéditeur·ice, **requis**.
-- `expediteur.nom` : nom de famille de l'expéditeur·ice, **requis**.
-- `expediteur.voie` : numéro de voie et nom de la voie, **requis**.
-- `expediteur.complement_adresse` : la seconde ligne parfois requise dans une adresse, *facultatif*.
-- `expediteur.code_postal` : code postal, **requis**.
-- `expediteur.commune` : commune de l'expéditeur·ice, **requis**.
+- `expediteur.nom` : nom complet l'expéditeur·ice, **requis**.
+- `expediteur.adresse` : addresse, sans la commune, sous forme de contenu ou de liste s'il y a plusieurs lignes, **requis**.
+- `expediteur.commune` : code postal et commune de l'expéditeur·ice, **requis**.
 - `expediteur.pays` : pays de l'expéditeur⋅ice, *facultatif*.
 -  `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
 -  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
@@ -28,11 +25,9 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 
 ### Destinataire
 
-- `destinataire.titre` : titre du ou de la destinataire, **requis**.
-- `destinataire.voie` : numéro de voie et nom de la voie, **requis**.
-- `destinataire.complement_adresse` : la seconde ligne parfois requise dans une adresse, *facultatif*.
-- `destinataire.code_postal` : code postal, **requis**.
-- `destinataire.commune` : commune du ou de la destinataire, **requis**.
+- `destinataire.nom` : nom ou titre du ou de la destinataire, **requis**.
+- `destinataire.adresse` : adresse, sans la commune, sous forme de contenu ou de liste s'il y a aucune ou plusieurs lignes, **requis**.
+- `destinataire.commune` : code postal et commune du ou de la destinataire, **requis**.
 - `destinataire.pays` : pays du ou de la destinataire, *facultatif*.
 - `destinataire.sc` : si le courrier est envoyé “sous couvert” d'une hiérarchie intermédiaire, spécifier cette autorité. *Facultatif*.
 
