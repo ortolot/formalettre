@@ -23,7 +23,8 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `expediteur.pays` : pays de l'expéditeur⋅ice, *facultatif*.
 -  `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
 -  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
-- `expediteur.signature` : peut être `true` ou `false`, par défaut `false`. Prévient le paquet qu’une image de signature sera ajoutée, de manière à organiser la superposition de la signature et du nom apposé en fin de courrier.
+- `expediteur.signature` : précise le nom à afficher en signature de fin de lettre. Par défaut, cela reprend le prénom et le nom, *facultatif*.
+- `expediteur.image_signature` : peut être rempli avec un contenu de type `image("signature.png")` pour intégrer l'image d'une signature numérisée. *Facultatif*
 
 ### Destinataire
 
@@ -61,6 +62,26 @@ Le texte de la lettre proprement dite se situe après la configuration de la let
 
 
 ## Notes
+
+### Signature
+
+Par défaut, le prénom et le nom de l'expéditeur sont repris pour la signature, mais on peut indiquer spécifiquement ce qu'on veut en renseignant l'option `signature`, par exemple pour signer avec son seul prénom.
+
+On peut également inclure une image de signature numérisée avec l'option `image_signature`. Celle-ci prend un contenu libre, ce qui suffit à inclure simplement une image à sa taille naturelle `image("signature.png")` ou au besoin de régler sa taille et de l'espacer :
+
+```typm
+#show formalettre.with(
+    expediteur: (
+        prenom: "Étienne",
+        …,
+        image_signature: pad(
+            top: 10mm, bottom: 5mm,
+            image("signature.png", height: 3cm)
+        ),
+    ),
+    destinataire: (…),
+)
+```
 
 ### Affranchissement
 
