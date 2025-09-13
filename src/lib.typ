@@ -8,7 +8,7 @@
   pays: [],
   telephone: "",  // string, not content: will be processed
   email: "",      // string, not content: will be processed
-  signature: false,
+  signature: "",
 )
 
 #let destinataire = (
@@ -58,6 +58,10 @@
     return format
 }
 
+#let not_empty(something) = {
+    something != "" and something != [] and something != none
+}
+
 #let lettre(
     expediteur: expediteur,
     destinataire: destinataire,
@@ -69,7 +73,9 @@
     nref: "",
     appel: "",
     salutation: "",
+    ps: [],
     pj: [],
+    cc: [],
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
@@ -84,7 +90,16 @@
     expediteur.pays = expediteur.at("pays", default: "")
     expediteur.telephone = expediteur.at("telephone", default: "")
     expediteur.email = expediteur.at("email", default: "")
-    expediteur.signature = expediteur.at("signature", default: false)
+    expediteur.signature = expediteur.at(
+        "signature",
+        default: [#expediteur.prenom #smallcaps(expediteur.nom)])
+    if type(expediteur.signature) == bool {
+        expediteur.signature = [
+            #v(-3cm)
+            #expediteur.prenom #smallcaps(expediteur.nom)
+        ]
+    }
+    expediteur.image_signature = expediteur.at("image_signature", default: [])
     // destinataire.titre is required
     // destinataire.voie is required
     destinataire.complement_adresse = destinataire.at("complement_adresse", default: "")
@@ -97,11 +112,11 @@
     expediteur.adresse = [
         #expediteur.prenom #smallcaps(expediteur.nom) \
         #expediteur.voie \
-        #if expediteur.complement_adresse != "" and expediteur.complement_adresse != [] [
+        #if not_empty(expediteur.complement_adresse) [
             #expediteur.complement_adresse \
         ]
         #expediteur.code_postal #expediteur.commune
-        #if expediteur.pays != "" and expediteur.pays != [] {
+        #if not_empty(expediteur.pays) {
             linebreak()
             smallcaps(expediteur.pays)
         }
@@ -130,15 +145,15 @@
     destinataire.adresse = [
         #destinataire.titre \
         #destinataire.voie \
-        #if destinataire.complement_adresse != "" and destinataire.complement_adresse != [] [
+        #if not_empty(destinataire.complement_adresse) [
             #destinataire.complement_adresse \
         ]
         #destinataire.code_postal #destinataire.commune
-        #if destinataire.pays != "" and destinataire.pays != [] {
+        #if not_empty(destinataire.pays) {
             linebreak()
             smallcaps(destinataire.pays)
         }
-        #if destinataire.sc != "" and destinataire.sc != [] [
+        #if not_empty(destinataire.sc) [
             #v(2.5em)
             s/c de #destinataire.sc \
         ]
@@ -284,25 +299,84 @@
 
     doc
 
-    if salutation != "" {
-        v(1em)
-        salutation
-    }
+    block(
+        breakable: false,
+        {
+            if salutation != "" {
+                v(1em)
+                salutation
+            }
 
-    if pj != "" and pj != [] {
-        [
-            #v(2.5em)
-            P. j. : #pj
-        ]
-    }
-    {
-        set align(right + horizon)
-        if expediteur.signature == true {
-            v(-3cm)
+            let hauteur_signature = 3cm
+            if expediteur.image_signature != [] {
+                hauteur_signature = auto
+            }
+
+            grid(
+                columns: (1fr, 1fr),
+                rows: (hauteur_signature, auto),
+                grid.cell(rowspan: 2)[],
+                grid.cell[
+                    #set align(center + horizon)
+                    #expediteur.image_signature
+                ],
+                grid.cell[
+                    #set align(center)
+                    #expediteur.signature
+                ]
+            )
         }
-        [
-            #expediteur.prenom #smallcaps[#expediteur.nom]
-        ]
+    )
+
+    if not_empty(ps) or not_empty(pj) or not_empty(cc) {
+        let width = 2.5em
+        let mentions = ()
+
+        if not_empty(ps) and type(ps) == content or type(ps) == str {
+            mentions.push("P.-S.")
+            mentions.push(ps)
+        }
+        else if type(ps) == array {
+            width = 1.3em
+            let prefix = "S."
+            for item in ps {
+                width += 1.2em
+                prefix = "P.-" + prefix
+                mentions.push(prefix)
+                mentions.push(item)
+            }
+        }
+        else if type(ps) == dictionary {
+            for (prefix, item) in ps {
+                mentions.push(prefix)
+                mentions.push(item)
+            }
+        }
+
+        if not_empty(ps) and type(pj) == content or type(pj) == str {
+            mentions.push("P. j.")
+            mentions.push(pj)
+        }
+        else if type(pj) == array {
+            mentions.push("P. j.")
+            mentions.push(list(marker: [], body-indent: 0pt, ..pj))
+        }
+
+        if not_empty(cc) and type(cc) == content or type(cc) == str {
+            mentions.push("C. c.")
+            mentions.push(cc)
+        }
+        else if type(cc) == array {
+            mentions.push("C. c.")
+            mentions.push(list(marker: [], body-indent: 0pt, ..cc))
+        }
+
+        v(2.5em)
+        grid(
+            columns: (width, 1fr),
+            row-gutter: 1.5em,
+            ..mentions
+        )
     }
 
     if enveloppe != none {

@@ -23,7 +23,8 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `expediteur.pays` : pays de l'expéditeur⋅ice, *facultatif*.
 -  `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
 -  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
-- `expediteur.signature` : peut être `true` ou `false`, par défaut `false`. Prévient le paquet qu’une image de signature sera ajoutée, de manière à organiser la superposition de la signature et du nom apposé en fin de courrier.
+- `expediteur.signature` : précise le nom à afficher en signature de fin de lettre. Par défaut, cela reprend le prénom et le nom, *facultatif*.
+- `expediteur.image_signature` : peut être rempli avec un contenu de type `image("signature.png")` pour intégrer l'image d'une signature numérisée. *Facultatif*
 
 ### Destinataire
 
@@ -45,6 +46,7 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `nref` : notre référence (référence utilisée par l'expéditeur), *facultatif*.
 - `appel` : formule d'appel, autrement dit formule initiale, désactivée par défaut. *Facultatif*.
 - `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
+- `ps` : permet de préciser un post-scriptum (ou plusieurs), *facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
 
 ```typc
@@ -54,6 +56,8 @@ pj: [
 	+ Attestation
 	]
 ```
+
+- `cc` : permet d'indiquer les destinataires additionnels de cette lettre, sous la forme d'une liste, *facultatif*.
 - `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 - `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 - `affranchissement` : fournir une chaîne (code d'affranchissement) ou un contenu tel que `image("timbre.png")` pour imprimer un affranchissement dans la zone idoine de l'enveloppe. *Facultatif*.
@@ -64,6 +68,70 @@ Le texte de la lettre proprement dite se situe après la configuration de la let
 
 
 ## Notes
+
+### Signature
+
+Par défaut, le prénom et le nom de l'expéditeur sont repris pour la signature, mais on peut indiquer spécifiquement ce qu'on veut en renseignant l'option `signature`, par exemple pour signer avec son seul prénom.
+
+On peut également inclure une image de signature numérisée avec l'option `image_signature`. Celle-ci prend un contenu libre, ce qui suffit à inclure simplement une image à sa taille naturelle `image("signature.png")` ou au besoin de régler sa taille et de l'espacer :
+
+```typm
+#show formalettre.with(
+    expediteur: (
+        prenom: "Étienne",
+        …,
+        image_signature: pad(
+            top: 10mm, bottom: 5mm,
+            image("signature.png", height: 3cm)
+        ),
+    ),
+    destinataire: (…),
+)
+```
+
+### Post-scriptum
+
+On peut préciser un post-scriptum, sous forme de texte ou de contenu :
+
+```typc
+ps: [Au fait, j'ai pris la liberté de prendre rendez-vous pour nous deux samedi prochain.]
+```
+
+On peut également définir plusieurs post-scriptums en fournissant une liste. Ils apparaîtront sous le nom de « P.-S. », « P.-P.-S. », etc., donc n'en abusez pas :
+
+```typc
+ps: (
+    "Au fait, …",
+    "N'oubliez pas non plus que…",
+)
+```
+
+Enfin, si vous souhaitez libeller différemment les post-scriptums, vous pouvez les fournir sous forme de dictionnaire :
+
+```typc
+ps: (
+    "PS": "Au fait…",
+    "PS2" : "N"oubliez pas non plus que…",
+)
+```
+
+### Pièces jointes
+
+Vous pouvez préciser les pièces jointes sous forme de contenu libre :
+
+```typc
+pj: [
+	+ Dossier n°1
+	+ Dossier n° 2
+	+ Attestation
+]
+```
+
+Vous pouvez également fournir une liste, auquel cas elles seront indiquées sous forme de liste verticale sans marqueur :
+
+```typc
+ps: ("Dossier n°1", "Dossier n°2", "Attestation")
+```
 
 ### Affranchissement
 

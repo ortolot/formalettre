@@ -4,15 +4,18 @@
 
 #show: lettre.with(
 expediteur: (
-  nom: "de La Boétie",
   prenom: "Étienne",
+  nom: "de La Boétie",
   voie: "145 avenue de Germignan",
   complement_adresse: "",
   code_postal: "33320",
   commune: "Le Taillan-Médoc",
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
-  signature: false, // indiquez true si ajout d’une image comme signature
+  signature: "Étienne", // par défaut, reprend le prénom et le nom
+  // Décommenter la ligne suivante pour inclure l'image d'une signature
+  // numérisée
+  // image_signature: image("signature.png")
 ),
 destinataire: (
   titre: "Michel de Montaigne",
@@ -30,7 +33,10 @@ ref: "1559/06/0001",    // au besoin, préciser à la place
                         // nref: "<réf. expéditeur>
 appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
-pj: "",
+ps: "Au fait, notez bien notre prochain rendez-vous !"
+// Décommentez la ligne suivante pour préciser des pièces jointes
+// pj: ("Photo de famille", "Copie de mon dernier essai")
+cc: [],
 marque_pliage: false,   // indiquez true pour imprimer une marque de pliage
                         //
 enveloppe: none,        // indiquez un format d'enveloppe, par exemple
@@ -44,8 +50,3 @@ affranchissement: none, // fournir un code d'affranchissement ou un contenu
 
 // Le corps du document remplace cette fonction
 #lorem(200)
-
-
-// Décommenter ces deux lignes pour ajouter la signature sous forme d’image
-//#set align(right + horizon)
-//#image("Signature.png")
