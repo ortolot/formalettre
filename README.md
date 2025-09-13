@@ -41,6 +41,7 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `objet` : l'objet du courrier, *facultatif*.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
+- `envoi` : informations d'envoi, par exemple « Recommandé avec accusé de réception numéro XXXXXXXX », *facultatif*.
 - `ref` : référence du courrier, *facultatif*.
 - `vref` : votre référence (référence utilisée par le destinataire), *facultatif*.
 - `nref` : notre référence (référence utilisée par l'expéditeur), *facultatif*.

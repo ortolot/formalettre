@@ -28,6 +28,9 @@ destinataire: (
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
+// Décommenter la ligne suivante pour afficher des informations d'envoi suivi
+// ou recommandé
+// envoi: [Lettre suivie numéro XXXXXXXX],
 ref: "1559/06/0001",    // au besoin, préciser à la place
                         // vref: "<réf. destinataire>
                         // nref: "<réf. expéditeur>

@@ -65,6 +65,7 @@
 #let lettre(
     expediteur: expediteur,
     destinataire: destinataire,
+    envoi: [],
     objet: [],
     date: [],
     lieu: [],
@@ -261,6 +262,9 @@
     }
 
     v(1em)
+    if not_empty(envoi) {
+        par(envoi)
+    }
     if objet != "" and objet != [] [
         *Objet : #objet*
         #v(1.8em)
