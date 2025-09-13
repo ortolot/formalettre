@@ -28,6 +28,9 @@ destinataire: (
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
+ref: "1559/06/0001",    // au besoin, préciser à la place
+                        // vref: "<réf. destinataire>
+                        // nref: "<réf. expéditeur>
 appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
 ps: "Au fait, notez bien notre prochain rendez-vous !"
