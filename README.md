@@ -38,22 +38,28 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 
 ### Lettre
 
-- `objet` : l'objet du courrier, **requis**.
+- `objet` : l'objet du courrier, *facultatif*.
 - `date` : date à indiquer sous forme libre, **requis**.
 - `lieu` : lieu de rédaction, **requis**.
 - `envoi` : informations d'envoi, par exemple « Recommandé avec accusé de réception numéro XXXXXXXX », *facultatif*.
+- `ref` : référence du courrier, *facultatif*.
+- `vref` : votre référence (référence utilisée par le destinataire), *facultatif*.
+- `nref` : notre référence (référence utilisée par l'expéditeur), *facultatif*.
 - `appel` : formule d'appel, autrement dit formule initiale, désactivée par défaut. *Facultatif*.
 - `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
+- `ps` : permet de préciser un post-scriptum (ou plusieurs), *facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
-- `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 
-```
+```typc
 pj: [
 	+ Dossier n°1
 	+ Dossier n° 2
 	+ Attestation
 	]
 ```
+
+- `cc` : permet d'indiquer les destinataires additionnels de cette lettre, sous la forme d'une liste, *facultatif*.
+- `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 - `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 - `affranchissement` : fournir une chaîne (code d'affranchissement) ou un contenu tel que `image("timbre.png")` pour imprimer un affranchissement dans la zone idoine de l'enveloppe. *Facultatif*.
 
@@ -84,6 +90,50 @@ On peut également inclure une image de signature numérisée avec l'option `ima
 )
 ```
 
+### Post-scriptum
+
+On peut préciser un post-scriptum, sous forme de texte ou de contenu :
+
+```typc
+ps: [Au fait, j'ai pris la liberté de prendre rendez-vous pour nous deux samedi prochain.]
+```
+
+On peut également définir plusieurs post-scriptums en fournissant une liste. Ils apparaîtront sous le nom de « P.-S. », « P.-P.-S. », etc., donc n'en abusez pas :
+
+```typc
+ps: (
+    "Au fait, …",
+    "N'oubliez pas non plus que…",
+)
+```
+
+Enfin, si vous souhaitez libeller différemment les post-scriptums, vous pouvez les fournir sous forme de dictionnaire :
+
+```typc
+ps: (
+    "PS": "Au fait…",
+    "PS2" : "N"oubliez pas non plus que…",
+)
+```
+
+### Pièces jointes
+
+Vous pouvez préciser les pièces jointes sous forme de contenu libre :
+
+```typc
+pj: [
+	+ Dossier n°1
+	+ Dossier n° 2
+	+ Attestation
+]
+```
+
+Vous pouvez également fournir une liste, auquel cas elles seront indiquées sous forme de liste verticale sans marqueur :
+
+```typc
+ps: ("Dossier n°1", "Dossier n°2", "Attestation")
+```
+
 ### Affranchissement
 
 Les services postaux de plusieurs pays proposent des services en ligne d'affranchissement à domicile. Il s'agit :
@@ -93,24 +143,12 @@ Les services postaux de plusieurs pays proposent des services en ligne d'affranc
 
 Le premier cas est le plus facile à intégrer sur une enveloppe générée par formalettre, en précisant :
 
-```typm
-#show formalettre.with(
-    expediteur: (…),
-    destinataire: (…),
-    …,
-    enveloppe: "dl", // ou autre format, p. ex. "c5"
-    affranchissement: "<code d'affranchissement>",
-)
+```typc
+affranchissement: "<code d'affranchissement>",
 ```
 
 Dans le second cas, les timbres à imprimer ne sont malheureusement pas fournis sous forme d'image individuelle, mais dans un document PDF à imprimer sur feuille A4, sur planche d'étiquette ou sur feuille A4. Pour l'intégrer à l'enveloppe générée par formalettre, vous devez alors en extraire une image correspondant au timbre seul, puis remplir ainsi les paramètres de formalettre :
 
-```typm
-#show formalettre.with(
-    expediteur: (…),
-    destinataire: (…),
-    …,
-    enveloppe: "dl", // ou autre format, p. ex. "c5"
-    affranchissement: image("timbre.png"),
-)
+```typc
+affranchissement: image("timbre.png"),
 ```
