@@ -246,6 +246,10 @@
     }
 
     v(1em)
+    if objet != "" and objet != [] [
+        *Objet : #objet*
+        #v(1.8em)
+    ]
 
     if ref != "" [
         Réf. #ref
