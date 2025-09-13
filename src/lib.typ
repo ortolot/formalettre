@@ -64,6 +64,9 @@
     objet: [],
     date: [],
     lieu: [],
+    ref: "",
+    vref: "",
+    nref: "",
     appel: "",
     salutation: "",
     pj: [],
@@ -247,6 +250,30 @@
         *Objet : #objet*
         #v(1.8em)
     ]
+
+    if ref != "" [
+        Réf. #ref
+        #v(1em)
+    ]
+    else if vref != "" and nref != "" [
+        V/réf. #vref
+        #h(1fr)
+        N/Réf. #nref
+        #h(3fr)
+        #v(1em)
+    ]
+    else if vref != "" [
+        V/réf. #vref \
+        #v(1em)
+    ]
+    else if nref != "" [
+        N/réf. #nref \
+        #v(1em)
+    ]
+
+    [*Objet : #objet*]
+    
+    v(1.8em)
 
     set par(justify: true)
 
