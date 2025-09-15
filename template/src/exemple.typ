@@ -7,6 +7,8 @@ expediteur: (
   nom: [Étienne #smallcaps[de la Boétie]],
   adresse: [145 avenue de Germignan],
   commune: [33320 Le Taillan-Médoc],
+  // Le téléphone et l'adresse email doivent être des chaînes de caractères et
+  // non des contenus. Ils seront traités pour en faire des liens cliquables.
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
   // Décommenter la ligne suivante pour utiliser autre chose que le prénom et
@@ -20,9 +22,6 @@ destinataire: (
   nom: [Michel de Montaigne],
   adresse: [17 butte Farémont],
   commune: [55000 Bar-le-Duc],
-  // Décommenter la ligne suivante pour include une mention s/c
-  // d'envoi par voie hiérarchique (sous couvert de)
-  // sc: "Quelqu'un",
 ),
 // Décommenter les lignes suivantes pour indiquer un envoi sous couvert d'un
 // intermédiaire hiérarchique.
@@ -31,21 +30,22 @@ destinataire: (
 //   adresse: ([Parlement de Bordeaux], [Palais de l'Ombrière], [Place du Palais]),
 //   commune: [33000 Bordeaux],
 // ),
-lieu: "Camp Germignan",
+lieu: [Camp Germignan],
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
 // Décommenter la ligne suivante pour afficher des informations d'envoi suivi
 // ou recommandé
 // envoi: [Lettre suivie numéro XXXXXXXX],
-ref: "1559/06/0001",    // au besoin, préciser à la place
-                        // vref: "<réf. destinataire>
-                        // nref: "<réf. expéditeur>
-appel: "Cher ami,",
-salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
-ps: "Au fait, notez bien notre prochain rendez-vous !",
-// Décommentez la ligne suivante pour préciser des pièces jointes
-// pj: ("Photo de famille", "Copie de mon dernier essai")
-cc: [],
+ref: [1559/06/0001],    // au besoin, préciser à la place
+                        // vref: [<réf. destinataire>]
+                        // nref: [<réf. expéditeur>]
+appel: [Cher ami,],
+salutation: [Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.],
+ps: [Au fait, notez bien notre prochain rendez-vous !],
+// Décommenter la ligne suivante pour préciser des pièces jointes
+// pj: ([Photo de famille], [Copie de mon dernier essai]),
+// Décommenter la ligne suivante pour indiquer des destinataires en copie
+// cc: ([Lambert Daneau], [Jean-Antoine du Baïf]),
 marque_pliage: false,   // indiquez true pour imprimer une marque de pliage
                         //
 enveloppe: none,        // indiquez un format d'enveloppe, par exemple
