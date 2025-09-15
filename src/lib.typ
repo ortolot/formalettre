@@ -130,6 +130,12 @@
     if destinataire == none {
         panic("you need to specify a sender (argument 'destinataire')")
     }
+    if date == none {
+        panic("you need to specify a date (argument 'date')")
+    }
+    if lieu == none {
+        panic("you need to specify a location (argument 'lieu')")
+    }
 
     // Set default values for sender optional fields
     // expediteur.nom is required
