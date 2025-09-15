@@ -46,6 +46,10 @@ enveloppe: none,        // indiquez un format d'enveloppe, par exemple
 affranchissement: none, // fournir un code d'affranchissement ou un contenu
                         // d'image de timbre pour qu'il soit imprimé
                         // dans la zone idoine de l'enveloppe
+                        //
+capitalisation: 0,      // pour passer les adresses en petites capitales ou
+                        // en majuscules, indiquer un niveau de capitalisation:
+                        // 1, 1.5, 2, 2.5, 3 ou 3.5 (cf. README)
 )
 
 // Le corps du document remplace cette fonction
