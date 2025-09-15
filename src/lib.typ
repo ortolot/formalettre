@@ -311,14 +311,6 @@
     }
 
     v(1em)
-    if not_empty(envoi) {
-        par(envoi)
-    }
-    if objet != "" and objet != [] [
-        *Objet : #objet*
-        #v(1.8em)
-    ]
-
     if ref != "" [
         Réf. #ref
         #v(1em)
@@ -339,9 +331,13 @@
         #v(1em)
     ]
 
-    [*Objet : #objet*]
-    
-    v(1.8em)
+    if not_empty(envoi) {
+        par(envoi)
+    }
+    if objet != "" and objet != [] [
+        *Objet : #objet*
+        #v(1.8em)
+    ]
 
     set par(justify: true)
 
