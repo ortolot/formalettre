@@ -316,19 +316,34 @@
                 hauteur_signature = auto
             }
 
-            grid(
-                columns: (1fr, 1fr),
-                rows: (hauteur_signature, auto),
-                grid.cell(rowspan: 2)[],
-                grid.cell[
-                    #set align(center + horizon)
-                    #expediteur.image_signature
-                ],
-                grid.cell[
-                    #set align(center)
-                    #expediteur.signature
-                ]
-            )
+            if type(expediteur.signature) == array {
+                let n = expediteur.signature.len()
+                grid(
+                    columns: expediteur.signature.map(_ => 1fr),
+                    rows: (hauteur_signature, auto),
+                    grid.cell(colspan: n, []),
+                    ..expediteur.signature.map(
+                        signature => grid.cell[
+                            #set align(center + horizon)
+                            #signature
+                        ]
+                    )
+                )
+            } else {
+                grid(
+                    columns: (1fr, 1fr),
+                    rows: (hauteur_signature, auto),
+                    grid.cell(rowspan: 2, []),
+                    grid.cell[
+                        #set align(center + horizon)
+                        #expediteur.image_signature
+                    ],
+                    grid.cell[
+                        #set align(center)
+                        #expediteur.signature
+                    ]
+                )
+            }
         }
     )
 
