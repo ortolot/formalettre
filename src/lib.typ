@@ -311,33 +311,30 @@
 
     pad(left: marges.at(0), right: marges.at(1), {
 
-    if envoi != none {
-        par(envoi)
-    }
-
     if ref != none [
         Réf. #ref
-        #v(1em)
     ]
     else if vref != none and nref != none [
         V/réf. #vref
         #h(1fr)
         N/réf. #nref
         #h(3fr)
-        #v(1em)
     ]
     else if vref != none [
-        V/réf. #vref \
-        #v(1em)
+        V/réf. #vref
     ]
     else if nref != none [
-        N/réf. #nref \
-        #v(1em)
+        N/réf. #nref
     ]
 
     if envoi != none {
         par(envoi)
     }
+
+    if ref != none or vref != none or nref != none or envoi != none {
+        v(1em)
+    }
+
     if objet != none [
         *Objet : #objet*
         #v(1.8em)
