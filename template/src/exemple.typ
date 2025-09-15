@@ -13,9 +13,11 @@ expediteur: (
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
   signature: "Étienne", // par défaut, reprend le prénom et le nom
+  // Remplacer par la ligne suivante pour indiquer plusieurs signataires :
+  // signature: ([Étienne de la Boétie], [Lambert Daneau]),
   // Décommenter la ligne suivante pour inclure l'image d'une signature
   // numérisée
-  // image_signature: image("signature.png")
+  // image_signature: image("signature.png"),
 ),
 destinataire: (
   titre: "Michel de Montaigne",
@@ -38,7 +40,7 @@ appel: "Cher ami,",
 salutation: "Veuillez agréer, cher ami, l'assurance de mes chaleureuses salutations.",
 ps: "Au fait, notez bien notre prochain rendez-vous !",
 // Décommentez la ligne suivante pour préciser des pièces jointes
-// pj: ("Photo de famille", "Copie de mon dernier essai")
+// pj: ("Photo de famille", "Copie de mon dernier essai"),
 cc: [],
 marque_pliage: false,   // indiquez true pour imprimer une marque de pliage
                         //

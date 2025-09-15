@@ -74,7 +74,16 @@ Le texte de la lettre proprement dite se situe après la configuration de la let
 
 Par défaut, le prénom et le nom de l'expéditeur sont repris pour la signature, mais on peut indiquer spécifiquement ce qu'on veut en renseignant l'option `signature`, par exemple pour signer avec son seul prénom.
 
-On peut également inclure une image de signature numérisée avec l'option `image_signature`. Celle-ci prend un contenu libre, ce qui suffit à inclure simplement une image à sa taille naturelle `image("signature.png")` ou au besoin de régler sa taille et de l'espacer :
+L'option `signature` permet également de préciser plusieurs signataires, sous la forme d'une liste :
+
+```typc
+expediteur: (
+    …,
+    signature: ([Pierre], [Paul], [Jacques]),
+)
+```
+
+Dans le cas ordinaire d'un signataire unique, on peut également inclure une image de signature numérisée avec l'option `image_signature`. Celle-ci prend un contenu libre, ce qui suffit à inclure simplement une image à sa taille naturelle `image("signature.png")` ou au besoin de régler sa taille et de l'espacer :
 
 ```typc
 expediteur: (
