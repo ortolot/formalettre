@@ -77,6 +77,7 @@
     ps: [],
     pj: [],
     cc: [],
+    marges: (1cm, 1cm),
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
@@ -262,6 +263,9 @@
     }
 
     v(1em)
+
+    pad(left: marges.at(0), right: marges.at(1), {
+
     if not_empty(envoi) {
         par(envoi)
     }
@@ -382,6 +386,7 @@
             ..mentions
         )
     }
+    })
 
     if enveloppe != none {
         let format = parse_format(enveloppe)

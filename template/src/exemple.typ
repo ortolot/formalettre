@@ -40,6 +40,9 @@ ps: "Au fait, notez bien notre prochain rendez-vous !",
 // Décommentez la ligne suivante pour préciser des pièces jointes
 // pj: ("Photo de famille", "Copie de mon dernier essai")
 cc: [],
+marges: (1.5cm, 1cm),   // pour ajouter des marges supplémentaires à gauche
+                        // et à droite du corps de la lettre
+                        //
 marque_pliage: false,   // indiquez true pour imprimer une marque de pliage
                         //
 enveloppe: none,        // indiquez un format d'enveloppe, par exemple

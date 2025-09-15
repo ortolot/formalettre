@@ -59,6 +59,7 @@ pj: [
 ```
 
 - `cc` : permet d'indiquer les destinataires additionnels de cette lettre, sous la forme d'une liste, *facultatif*.
+- `marges` : indiquer deux dimensions pour ajouter des marges supplémentaires à gauche et à droite du corps de la lettre: `(1cm, 1cm)` par défaut, *facultatif*.
 - `marque_pliage` : `false` par défaut, mettre à `true` pour imprimer une petite ligne indiquant où plier la page pour la mettre dans une enveloppe DL ou C5/6. *Facultatif*.
 - `enveloppe` : permet de générer une page à imprimer sur une enveloppe de la taille indiquée, qui peut être une chaîne contenant le nom d'un format courant (`c4`, `c5`, `c6`, `c56` ou `dl`) ou une spécification manuelle sous la forme `(<longueur>, <largeur>)`. *Facultatif*.
 - `affranchissement` : fournir une chaîne (code d'affranchissement) ou un contenu tel que `image("timbre.png")` pour imprimer un affranchissement dans la zone idoine de l'enveloppe. *Facultatif*.
