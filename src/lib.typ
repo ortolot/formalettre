@@ -1,23 +1,3 @@
-#let expediteur = (
-  nom: [],
-  adresse: (),        // actually optional, see below
-  commune: [],
-  // pays: [],        // optional
-  // telephone: "",   // string, not content: will be processed; optional
-  // email: "",       // string, not content: will be processed; optional
-  // signature: [],   // optional
-)
-
-
-#let destinataire = (
-    nom: [],
-    adresse: (),  // actually optional, see below
-    commune: [],
-    // pays: [],  // optional
-    // sc: [],    // sous couvert; optional
-)
-
-
 // Known envelope formats
 #let formats_enveloppe = (
     c4: (width: 32.4cm, height: 22.9cm),
@@ -25,6 +5,7 @@
     c6: (width: 16.2cm, height: 11.4cm),
     c56: (width: 22.9cm, height: 11.4cm),
     dl: (width: 22cm, height: 11cm))
+
 
 // Parse an envelope format specification and return a format
 // dictionary. The specification can be:
@@ -55,13 +36,16 @@
     return format
 }
 
+
 #let is_empty(something) = {
     something == "" or something == [] or something == none
 }
 
+
 #let not_empty(something) = {
     something != "" and something != [] and something != none
 }
+
 
 // (Small-)capitalize content if the capitalization level is above a minimum
 // value
