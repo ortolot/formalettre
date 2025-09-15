@@ -380,10 +380,12 @@
         }
 
         v(2.5em)
-        grid(
-            columns: (width, 1fr),
-            row-gutter: 1.5em,
-            ..mentions
+        pad(left: -width,
+            grid(
+                columns: (width, 1fr),
+                row-gutter: 1.5em,
+                ..mentions
+            )
         )
     }
     })
