@@ -117,6 +117,7 @@
     ps: none,
     pj: none,
     cc: none,
+    marges: (1cm, 1cm),
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
@@ -307,6 +308,13 @@
     }
 
     v(1em)
+
+    pad(left: marges.at(0), right: marges.at(1), {
+
+    if envoi != none {
+        par(envoi)
+    }
+
     if ref != none [
         Réf. #ref
         #v(1em)
@@ -314,7 +322,7 @@
     else if vref != none and nref != none [
         V/réf. #vref
         #h(1fr)
-        N/Réf. #nref
+        N/réf. #nref
         #h(3fr)
         #v(1em)
     ]
@@ -417,12 +425,15 @@
         }
 
         v(2.5em)
-        grid(
-            columns: (width, 1fr),
-            row-gutter: 1.5em,
-            ..mentions
+        pad(left: -width,
+            grid(
+                columns: (width, 1fr),
+                row-gutter: 1.5em,
+                ..mentions
+            )
         )
     }
+    })
 
     if enveloppe != none {
         let format = parse_format(enveloppe)
