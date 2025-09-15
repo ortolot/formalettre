@@ -1,8 +1,8 @@
 [package]
 name = "formalettre"
-version = "0.1.3"
+version = "0.2.0"
 entrypoint = "src/lib.typ"
-authors = ["@Brndan"]
+authors = ["Brndan <@Brndan>", "Elessar <tanguy+typst@ortolo.eu>"]
 license = "BSD-3-Clause"
 description = "French formal letter template"
 repository = "https://github.com/Brndan/lettre"
