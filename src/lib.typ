@@ -1,26 +1,3 @@
-#let expediteur = (
-  nom: [],
-  prenom: [],
-  voie: [],
-  complement_adresse: [],
-  code_postal: [],
-  commune: [],
-  pays: [],
-  telephone: "",  // string, not content: will be processed
-  email: "",      // string, not content: will be processed
-  signature: "",
-)
-
-#let destinataire = (
-    titre: [],
-    voie: [],
-    complement_adresse: [],
-    code_postal: [],
-    commune: [],
-    pays: [],
-    sc: [],
-)
-
 // Known envelope formats
 #let formats_enveloppe = (
     c4: (width: 32.4cm, height: 22.9cm),
@@ -28,6 +5,7 @@
     c6: (width: 16.2cm, height: 11.4cm),
     c56: (width: 22.9cm, height: 11.4cm),
     dl: (width: 22cm, height: 11cm))
+
 
 // Parse an envelope format specification and return a format
 // dictionary. The specification can be:
@@ -58,83 +36,149 @@
     return format
 }
 
-#let not_empty(something) = {
-    something != "" and something != [] and something != none
+
+// (Small-)capitalize content if the capitalization level is above a minimum
+// value
+#let capitalise(cap_level, min_level, content) = {
+    let cap = smallcaps
+    if calc.fract(cap_level) != 0 {
+        cap = upper
+    }
+    if cap_level >= min_level {
+        return cap(content)
+    }
+    else {
+        return content
+    }
 }
 
+
+#let bloc_adresse(personne, capitalisation: 0) = {
+    capitalise(capitalisation, 3, personne.nom)
+    linebreak()
+    // personne.adresse may be a simple string or content, convert it to a list
+    if type(personne.adresse) == str or type(personne.adresse) == content {
+        personne.adresse = (personne.adresse,)
+    }
+    for ligne in personne.adresse {
+        capitalise(capitalisation, 2, ligne)
+        linebreak()
+    }
+    capitalise(capitalisation, 1, personne.commune)
+    linebreak()
+    if "pays" in personne {
+        capitalise(capitalisation, 1, personne.pays)
+        linebreak()
+    }
+}
+
+
 #let lettre(
-    expediteur: expediteur,
-    destinataire: destinataire,
-    envoi: [],
-    objet: [],
-    date: [],
-    lieu: [],
-    ref: "",
-    vref: "",
-    nref: "",
-    appel: "",
-    salutation: "",
-    ps: [],
-    pj: [],
-    cc: [],
+    // expediteur is actually required, see panic below
+    // expected content:
+    // (
+    //     nom: [Prénom Nom],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],                           // optional
+    //     telephone: "01 99 00 67 89",              // optional
+    //     email: "untel@example.com",               // optional
+    //     signature: [Prénom],                      // optional
+    //     image_signature: image("signature.png"),  // optional
+    // )
+    expediteur: none,    // actually required, see panic below
+    // destinataire is actually required, see panic below
+    // expected content:
+    // (
+    //     nom: [Prénom Nom ou Titre],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],  // optional
+    // )
+    destinataire: none,  // actually required, see panic below
+    // intermediaire is really optional
+    // expected content:
+    // (
+    //     nom: [Prénom Nom ou Titre],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],  // optional
+    // )
+    intermediaire: none,
+    envoi: none,
+    objet: none,
+    date: none,  // actually required, see panic below
+    lieu: none,  // actually required, see panic below
+    ref: none,
+    vref: none,
+    nref: none,
+    appel: none,
+    salutation: none,
+    ps: none,
+    pj: none,
+    cc: none,
+    marges: (1cm, 1cm),
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
+    capitalisation: 0,
     doc,
 ) = {
-    // expediteur.prenom is required
+    // expediteur and destinataire are actually required
+    if expediteur == none {
+        panic("you need to specify a sender (argument 'expediteur')")
+    }
+    if destinataire == none {
+        panic("you need to specify a sender (argument 'destinataire')")
+    }
+    if date == none {
+        panic("you need to specify a date (argument 'date')")
+    }
+    if lieu == none {
+        panic("you need to specify a location (argument 'lieu')")
+    }
+
+    // Set default values for sender optional fields
     // expediteur.nom is required
-    expediteur.complement_adresse = expediteur.at("complement_adresse", default: "")
-    // expediteur.voie is required
-    // expediteur.code_postal is required
+    // expediteur.adresse is required (but may be an empty list as there exist
+    //     organizations that only have a name and a locality)
     // expediteur.commune is required
-    expediteur.pays = expediteur.at("pays", default: "")
-    expediteur.telephone = expediteur.at("telephone", default: "")
-    expediteur.email = expediteur.at("email", default: "")
+    // expediteur.pays is optional and handled by bloc_adresse()
+    expediteur.telephone = expediteur.at("telephone", default: none)
+    expediteur.email = expediteur.at("email", default: none)
     expediteur.signature = expediteur.at(
         "signature",
-        default: [#expediteur.prenom #smallcaps(expediteur.nom)])
+        default: expediteur.nom)
     if type(expediteur.signature) == bool {
         expediteur.signature = [
             #v(-3cm)
-            #expediteur.prenom #smallcaps(expediteur.nom)
+            #expediteur.nom
         ]
     }
-    expediteur.image_signature = expediteur.at("image_signature", default: [])
-    // destinataire.titre is required
-    // destinataire.voie is required
-    destinataire.complement_adresse = destinataire.at("complement_adresse", default: "")
-    // destinataire.code_postal is required
+    expediteur.image_signature = expediteur.at("image_signature", default: none)
+
+    // Set default values for recipient-specific optional fields
+    // destinataire.nom is required
+    // destinataire.adresse is required (but may be an empty list as there exist
+    //     organization that only have a name and a locality)
     // destinataire.commune is required
-    destinataire.pays = destinataire.at("pays", default: "")
-    destinataire.sc = destinataire.at("sc", default: "")
+    // destinataire.pays is optional and handled by bloc_adresse()
 
     // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
-    expediteur.adresse = [
-        #expediteur.prenom #smallcaps(expediteur.nom) \
-        #expediteur.voie \
-        #if not_empty(expediteur.complement_adresse) [
-            #expediteur.complement_adresse \
-        ]
-        #expediteur.code_postal #expediteur.commune
-        #if not_empty(expediteur.pays) {
-            linebreak()
-            smallcaps(expediteur.pays)
-        }
-    ]
+    expediteur.bloc_adresse = bloc_adresse(expediteur, capitalisation: capitalisation)
 
     // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
-    if expediteur.telephone == "" and expediteur.email == "" {
-        expediteur.coordonnees = []
+    if expediteur.telephone == none and expediteur.email == none {
+        expediteur.coordonnees = none
     }
     else {
         expediteur.coordonnees = {
-            if expediteur.telephone != "" [
+            if expediteur.telephone != none [
                 tél. : #link(
                     "tel:"+ expediteur.telephone.replace(" ", "-"),
                     expediteur.telephone) \
             ]
-            if expediteur.email != "" [
+            if expediteur.email != none [
                 email : #link(
                     "mailto:" + expediteur.email,
                     raw(expediteur.email)) \
@@ -143,56 +187,45 @@
     }
 
     // Bloc d'adresse du destinataire, utilisable pour l'en-tête et l'enveloppe
-    destinataire.adresse = [
-        #destinataire.titre \
-        #destinataire.voie \
-        #if not_empty(destinataire.complement_adresse) [
-            #destinataire.complement_adresse \
-        ]
-        #destinataire.code_postal #destinataire.commune
-        #if not_empty(destinataire.pays) {
-            linebreak()
-            smallcaps(destinataire.pays)
-        }
-        #if not_empty(destinataire.sc) [
-            #v(2.5em)
-            s/c de #destinataire.sc \
-        ]
+    destinataire.bloc_adresse = [
+        #bloc_adresse(destinataire, capitalisation: capitalisation)
     ]
 
     // An windowed enveloppe looks like this:
-    //                          220 mm
-    //       ┌───────────────────────────────────────────┐
-    //     ┌ ┌───────────────────────────────────────────┐ ┐
-    //     │ │                                           │ │
-    //     │ │                                           │ │ 45 mm
-    //     │ │                                           │ │
-    //     │ │                   ┌───────────────────┐   │ ┤
-    // 110 │ │                   │                   │   │ │
-    //  mm │ │                   │                   │   │ │ 45 mm
-    //     │ │                   │                   │   │ │
-    //     │ │                   └───────────────────┘   │ ┤
-    //     │ │                                           │ │ 20 mm
-    //     └ └───────────────────────────────────────────┘ ┘
-    //       └───────────────────┴───────────────────┴───┘
-    //            100 mm              100 mm      20 mm
+    //         20 mm 60 mm              140 mm
+    //         ┌───┬───────┬───────────────────────────────┐
+    //       ┌ ┌───────────────────────────────────────────┐ ┐
+    // 20 mm │ │                                           │ │
+    //       ├ │   ┌───────┐                               │ │ 45 mm
+    // 40 mm │ │   │       │                               │ │
+    //       │ │   │       │       ┌───────────────────┐   │ ┤
+    //       ├ │   └───────┘       │                   │   │ │
+    //       │ │                   │                   │   │ │ 45 mm
+    // 50 mm │ │                   │                   │   │ │
+    //       │ │                   └───────────────────┘   │ ┤
+    //       │ │                                           │ │ 20 mm
+    //       └ └───────────────────────────────────────────┘ ┘
+    //         └───────────────────┴───────────────────┴───┘
+    //                 100 mm              100 mm      20 mm
     //
     // The folded letter is 210 mm large and 99 mm high, and can
     // therefore more horizontally by 10 mm and vertically by 11 mm.
     // This results in the following safe zone for the recipient
     // address:
-    // ┌───────────────────────────────────────────┐ ┐
-    // │                                           │ │
-    // │                                           │ │ 45 mm
-    // │                                           │ │
-    // │                   ┌───────────────────┐   │ ┤
-    // │                   │                   │   │ │ 34 mm
-    // │                   │                   │   │ │
-    // │                   └───────────────────┘   │ ┤
-    // │                                           │ │ 20 mm
-    // └─────────────── fold ── here ──────────────┘ ┘
-    // └───────────────────┴───────────────────┴───┘
-    //         100 mm              90 mm       20 mm
+    //         20 mm 50 mm              140 mm
+    //         ┌───┬───────┬───────────────────────────────┐
+    //       ┌ ┌───────────────────────────────────────────┐ ┐
+    // 20 mm │ │                                           │ │
+    //       ├ │   ┌───────┐                               │ │ 45 mm
+    // 29 mm │ │   │       │                               │ │
+    //       ├ │   └───────┘       ┌───────────────────┐   │ ┤
+    //       │ │                   │                   │   │ │ 34 mm
+    // 50 mm │ │                   │                   │   │ │
+    //       │ │                   └───────────────────┘   │ ┤
+    //       │ │                                           │ │ 20 mm
+    //       └ └─────────────── fold ── here ──────────────┘ ┘
+    //         └───────────────────┴───────────────────┴───┘
+    //                 100 mm              90 mm       20 mm
     //
     // We use a (width: 100%, height: 100mm) box containing a grid with
     // some merged cells to position sender, place and date, and
@@ -211,9 +244,9 @@
     // │   │               │#2 │ Address   │#3 │   │ │       │ 75 mm
     // │   │               ├───┴───────────┴───┤   │ ┤       │
     // │   │               │     filler #4     │   │ │ 1fr   │
-    // │   ├───────────────┴───────────────────┤   │ ┤       │
-    // │   │            filler #5              │   │ │ 20 mm │
-    // └───┴───────────────────────────────────┴───┘ ┘ ──────┘
+    // │   │               ├───┬───────────┬───┤   │ ┤       │
+    // │   │               │f#5│    s/c    │f#6│   │ │ 20 mm │
+    // └───┴───────────────┴───┴───────────┴───┴───┘ ┘ ──────┘
     // └───┴───────────────┴───┴───────────┴───┴───┘
     // 25mm│ 75mm = 46.875% 1fr     auto    1fr│25mm
     //     └───────────────────────────────────┘
@@ -230,14 +263,16 @@
         grid(
             columns: (46.875%, 1fr, auto, 1fr),
             rows: (20mm, 1fr, auto, 1fr, 20mm),
-            grid.cell(rowspan: 4,  // sender address and contact info
-                [
-                    #expediteur.adresse
-                    #if expediteur.coordonnees != [] {
-                        par(expediteur.coordonnees)
-                    }
-                ]
-            ),
+            grid.cell(rowspan: 5, {  // sender address and contact info
+                if enveloppe == none {
+                    bloc_adresse(expediteur, capitalisation: capitalisation)
+                } else {
+                    bloc_adresse(expediteur)
+                }
+                if expediteur.coordonnees != none {
+                    par(expediteur.coordonnees)
+                }
+            }),
             grid.cell(colspan: 3,  // place and date
                 [
                     #set align(right)
@@ -246,12 +281,23 @@
                     #lieu, #date
                 ]
             ),
-            grid.cell(colspan: 3, []),         // filler #1
-            grid.cell[],                       // filler #2
-            grid.cell[#destinataire.adresse],  // sender address
-            grid.cell[],                       // filler #3
-            grid.cell(colspan: 3, []),         // filler #4
-            grid.cell(colspan: 4, []),         // filler #5
+            grid.cell(colspan: 3, []),  // filler #1
+            grid.cell[],                // filler #2
+            grid.cell(                  // sender address
+                if enveloppe == none {
+                    bloc_adresse(destinataire, capitalisation: capitalisation)
+                } else {
+                    bloc_adresse(destinataire)
+                }
+            ),
+            grid.cell[],                // filler #3
+            grid.cell(colspan: 3, []),  // filler #4
+            grid.cell[],                // filler #5
+            grid.cell(align(horizon,
+                if intermediaire != none [
+                    s/c de #intermediaire.nom
+            ])),
+            grid.cell[],                // filler #6
         )
     )
 
@@ -262,41 +308,41 @@
     }
 
     v(1em)
-    if not_empty(envoi) {
+
+    pad(left: marges.at(0), right: marges.at(1), {
+
+    if ref != none [
+        Réf. #ref
+    ]
+    else if vref != none and nref != none [
+        V/réf. #vref
+        #h(1fr)
+        N/réf. #nref
+        #h(3fr)
+    ]
+    else if vref != none [
+        V/réf. #vref
+    ]
+    else if nref != none [
+        N/réf. #nref
+    ]
+
+    if envoi != none {
         par(envoi)
     }
-    if objet != "" and objet != [] [
+
+    if ref != none or vref != none or nref != none or envoi != none {
+        v(1em)
+    }
+
+    if objet != none [
         *Objet : #objet*
         #v(1.8em)
     ]
 
-    if ref != "" [
-        Réf. #ref
-        #v(1em)
-    ]
-    else if vref != "" and nref != "" [
-        V/réf. #vref
-        #h(1fr)
-        N/Réf. #nref
-        #h(3fr)
-        #v(1em)
-    ]
-    else if vref != "" [
-        V/réf. #vref \
-        #v(1em)
-    ]
-    else if nref != "" [
-        N/réf. #nref \
-        #v(1em)
-    ]
-
-    [*Objet : #objet*]
-    
-    v(1.8em)
-
     set par(justify: true)
 
-    if appel != "" {
+    if appel != none {
         appel
         v(1em)
     }
@@ -306,13 +352,13 @@
     block(
         breakable: false,
         {
-            if salutation != "" {
+            if salutation != none {
                 v(1em)
                 salutation
             }
 
             let hauteur_signature = 3cm
-            if expediteur.image_signature != [] {
+            if expediteur.image_signature != none {
                 hauteur_signature = auto
             }
 
@@ -347,11 +393,11 @@
         }
     )
 
-    if not_empty(ps) or not_empty(pj) or not_empty(cc) {
+    if ps != none or ps != none or cc != none {
         let width = 2.5em
         let mentions = ()
 
-        if not_empty(ps) and type(ps) == content or type(ps) == str {
+        if type(ps) == content or type(ps) == str {
             mentions.push("P.-S.")
             mentions.push(ps)
         }
@@ -372,7 +418,7 @@
             }
         }
 
-        if not_empty(ps) and type(pj) == content or type(pj) == str {
+        if type(pj) == content or type(pj) == str {
             mentions.push("P. j.")
             mentions.push(pj)
         }
@@ -381,7 +427,7 @@
             mentions.push(list(marker: [], body-indent: 0pt, ..pj))
         }
 
-        if not_empty(cc) and type(cc) == content or type(cc) == str {
+        if type(cc) == content or type(cc) == str {
             mentions.push("C. c.")
             mentions.push(cc)
         }
@@ -391,12 +437,15 @@
         }
 
         v(2.5em)
-        grid(
-            columns: (width, 1fr),
-            row-gutter: 1.5em,
-            ..mentions
+        pad(left: -width,
+            grid(
+                columns: (width, 1fr),
+                row-gutter: 1.5em,
+                ..mentions
+            )
         )
     }
+    })
 
     if enveloppe != none {
         let format = parse_format(enveloppe)
@@ -442,7 +491,7 @@
                     grid.cell[         // sender block
                         #set align(left + top)
                         Expéditeur :\
-                        #expediteur.adresse
+                        #bloc_adresse(expediteur, capitalisation: capitalisation)
                     ],
                     grid.cell[         // stamp block
                         #set align(right + top)
@@ -453,10 +502,16 @@
                 )
             ),
             grid.cell[],               // filler #1
-            grid.cell[                 // recipient block
-                #set align(left + horizon)
-                #destinataire.adresse
-            ],
+            grid.cell(                 // recipient block
+                align(
+                    left + horizon,
+                    if intermediaire != none {
+                        bloc_adresse(intermediaire, capitalisation: capitalisation)
+                    } else {
+                        bloc_adresse(destinataire, capitalisation: capitalisation)
+                    }
+                )
+            ),
             grid.cell[],               // filler #2
             grid.cell(colspan: 3, [])  // filler #3
         )
