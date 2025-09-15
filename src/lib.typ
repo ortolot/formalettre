@@ -241,9 +241,9 @@
     // │   │               │#2 │ Address   │#3 │   │ │       │ 75 mm
     // │   │               ├───┴───────────┴───┤   │ ┤       │
     // │   │               │     filler #4     │   │ │ 1fr   │
-    // │   ├───────────────┴───────────────────┤   │ ┤       │
-    // │   │            filler #5              │   │ │ 20 mm │
-    // └───┴───────────────────────────────────┴───┘ ┘ ──────┘
+    // │   │               ├───┬───────────┬───┤   │ ┤       │
+    // │   │               │f#5│    s/c    │f#6│   │ │ 20 mm │
+    // └───┴───────────────┴───┴───────────┴───┴───┘ ┘ ──────┘
     // └───┴───────────────┴───┴───────────┴───┴───┘
     // 25mm│ 75mm = 46.875% 1fr     auto    1fr│25mm
     //     └───────────────────────────────────┘
@@ -260,7 +260,7 @@
         grid(
             columns: (46.875%, 1fr, auto, 1fr),
             rows: (20mm, 1fr, auto, 1fr, 20mm),
-            grid.cell(rowspan: 4, {  // sender address and contact info
+            grid.cell(rowspan: 5, {  // sender address and contact info
                 if enveloppe == none {
                     bloc_adresse(expediteur, capitalisation: capitalisation)
                 } else {
@@ -278,22 +278,23 @@
                     #lieu, #date
                 ]
             ),
-            grid.cell(colspan: 3, []),              // filler #1
-            grid.cell[],                            // filler #2
-            grid.cell({                             // sender address
+            grid.cell(colspan: 3, []),  // filler #1
+            grid.cell[],                // filler #2
+            grid.cell(                  // sender address
                 if enveloppe == none {
                     bloc_adresse(destinataire, capitalisation: capitalisation)
                 } else {
                     bloc_adresse(destinataire)
                 }
-                if not_empty(destinataire.sc) [
-                    #v(2.5em)
-                    s/c de #destinataire.sc \
-                ]
-            }),
-            grid.cell[],                            // filler #3
-            grid.cell(colspan: 3, []),              // filler #4
-            grid.cell(colspan: 4, []),              // filler #5
+            ),
+            grid.cell[],                // filler #3
+            grid.cell(colspan: 3, []),  // filler #4
+            grid.cell[],                // filler #5
+            grid.cell(align(horizon,
+                if intermediaire != none [
+                    s/c de #intermediaire.nom
+            ])),
+            grid.cell[],                // filler #6
         )
     )
 
@@ -408,10 +409,16 @@
                 )
             ),
             grid.cell[],               // filler #1
-            grid.cell[                 // recipient block
-                #set align(left + horizon)
-                #bloc_adresse(destinataire, capitalisation: capitalisation)
-            ],
+            grid.cell(                 // recipient block
+                align(
+                    left + horizon,
+                    if intermediaire != none {
+                        bloc_adresse(intermediaire, capitalisation: capitalisation)
+                    } else {
+                        bloc_adresse(destinataire, capitalisation: capitalisation)
+                    }
+                )
+            ),
             grid.cell[],               // filler #2
             grid.cell(colspan: 3, [])  // filler #3
         )
