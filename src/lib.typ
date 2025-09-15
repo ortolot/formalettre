@@ -37,16 +37,6 @@
 }
 
 
-#let is_empty(something) = {
-    something == "" or something == [] or something == none
-}
-
-
-#let not_empty(something) = {
-    something != "" and something != [] and something != none
-}
-
-
 // (Small-)capitalize content if the capitalization level is above a minimum
 // value
 #let capitalise(cap_level, min_level, content) = {
@@ -76,7 +66,7 @@
     }
     capitalise(capitalisation, 1, personne.commune)
     linebreak()
-    if "pays" in personne and not_empty(personne.pays) {
+    if "pays" in personne {
         capitalise(capitalisation, 1, personne.pays)
         linebreak()
     }
@@ -115,18 +105,18 @@
     //     pays: [France],  // optional
     // )
     intermediaire: none,
-    envoi: [],
-    objet: [],
-    date: [],
-    lieu: [],
-    ref: "",
-    vref: "",
-    nref: "",
-    appel: "",
-    salutation: "",
-    ps: [],
-    pj: [],
-    cc: [],
+    envoi: none,
+    objet: none,
+    date: none,  // actually required, see panic below
+    lieu: none,  // actually required, see panic below
+    ref: none,
+    vref: none,
+    nref: none,
+    appel: none,
+    salutation: none,
+    ps: none,
+    pj: none,
+    cc: none,
     marque_pliage: false,
     enveloppe: none,
     affranchissement: none,
@@ -171,17 +161,17 @@
     expediteur.bloc_adresse = bloc_adresse(expediteur, capitalisation: capitalisation)
 
     // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
-    if expediteur.telephone == "" and expediteur.email == "" {
-        expediteur.coordonnees = []
+    if expediteur.telephone == none and expediteur.email == none {
+        expediteur.coordonnees = none
     }
     else {
         expediteur.coordonnees = {
-            if expediteur.telephone != "" [
+            if expediteur.telephone != none [
                 tél. : #link(
                     "tel:"+ expediteur.telephone.replace(" ", "-"),
                     expediteur.telephone) \
             ]
-            if expediteur.email != "" [
+            if expediteur.email != none [
                 email : #link(
                     "mailto:" + expediteur.email,
                     raw(expediteur.email)) \
@@ -272,7 +262,7 @@
                 } else {
                     bloc_adresse(expediteur)
                 }
-                if expediteur.coordonnees != [] {
+                if expediteur.coordonnees != none {
                     par(expediteur.coordonnees)
                 }
             }),
@@ -311,37 +301,37 @@
     }
 
     v(1em)
-    if ref != "" [
+    if ref != none [
         Réf. #ref
         #v(1em)
     ]
-    else if vref != "" and nref != "" [
+    else if vref != none and nref != none [
         V/réf. #vref
         #h(1fr)
         N/Réf. #nref
         #h(3fr)
         #v(1em)
     ]
-    else if vref != "" [
+    else if vref != none [
         V/réf. #vref \
         #v(1em)
     ]
-    else if nref != "" [
+    else if nref != none [
         N/réf. #nref \
         #v(1em)
     ]
 
-    if not_empty(envoi) {
+    if envoi != none {
         par(envoi)
     }
-    if objet != "" and objet != [] [
+    if objet != none [
         *Objet : #objet*
         #v(1.8em)
     ]
 
     set par(justify: true)
 
-    if appel != "" {
+    if appel != none {
         appel
         v(1em)
     }
@@ -351,13 +341,13 @@
     block(
         breakable: false,
         {
-            if salutation != "" {
+            if salutation != none {
                 v(1em)
                 salutation
             }
 
             let hauteur_signature = 3cm
-            if expediteur.image_signature != [] {
+            if expediteur.image_signature != none {
                 hauteur_signature = auto
             }
 
@@ -377,11 +367,11 @@
         }
     )
 
-    if not_empty(ps) or not_empty(pj) or not_empty(cc) {
+    if ps != none or ps != none or cc != none {
         let width = 2.5em
         let mentions = ()
 
-        if not_empty(ps) and type(ps) == content or type(ps) == str {
+        if type(ps) == content or type(ps) == str {
             mentions.push("P.-S.")
             mentions.push(ps)
         }
@@ -402,7 +392,7 @@
             }
         }
 
-        if not_empty(ps) and type(pj) == content or type(pj) == str {
+        if type(pj) == content or type(pj) == str {
             mentions.push("P. j.")
             mentions.push(pj)
         }
@@ -411,7 +401,7 @@
             mentions.push(list(marker: [], body-indent: 0pt, ..pj))
         }
 
-        if not_empty(cc) and type(cc) == content or type(cc) == str {
+        if type(cc) == content or type(cc) == str {
             mentions.push("C. c.")
             mentions.push(cc)
         }
