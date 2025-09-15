@@ -29,7 +29,18 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `destinataire.adresse` : adresse, sans la commune, sous forme de contenu ou de liste s'il y a aucune ou plusieurs lignes, **requis**.
 - `destinataire.commune` : code postal et commune du ou de la destinataire, **requis**.
 - `destinataire.pays` : pays du ou de la destinataire, *facultatif*.
-- `destinataire.sc` : si le courrier est envoyé “sous couvert” d'une hiérarchie intermédiaire, spécifier cette autorité. *Facultatif*.
+
+### Intermédiaire
+
+Dans le cas d'une lettre transmise par voie hiérarchique, on peut spécifier
+l'intermédiaire, qui sera indiqué par la mention « s/c de » (sous couvert de)
+dans l'en-tête de la lettre, et qui apparaîtra comme destinaitaire sur
+l'enveloppe, si on en imprime une.
+
+- `intermediaire.nom` : nom ou titre de l'intermédiaire, **requis**.
+- `intermediaire.adresse` : adresse, sans la commune, sous forme de contenu ou de liste s'il y a plusieurs lignes, **requis** en cas de génération d'enveloppe.
+- `intermediaire.commune` : code postal et commune de l'intermédiaire, **requis** en cas de génération d'enveloppe.
+- `intermediaire.pays` : pays de l'intermédiaire, *facultatif*.
 
 ### Lettre
 

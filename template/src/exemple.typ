@@ -24,6 +24,13 @@ destinataire: (
   // d'envoi par voie hiérarchique (sous couvert de)
   // sc: "Quelqu'un",
 ),
+// Décommenter les lignes suivantes pour indiquer un envoi sous couvert d'un
+// intermédiaire hiérarchique.
+// intermediaire: (
+//   nom: [M. le Président Benoist de Lagebaston],
+//   adresse: ([Parlement de Bordeaux], [Palais de l'Ombrière], [Place du Palais]),
+//   commune: [33000 Bordeaux],
+// ),
 lieu: "Camp Germignan",
 objet: [Ceci est un objet de courrier.],
 date: [le 7 juin 1559],
