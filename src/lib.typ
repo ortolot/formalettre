@@ -78,20 +78,59 @@
     }
 }
 
-#let bloc_adresse(personne, capitalisation: 0) = [
-    #capitalise(capitalisation, 3, personne.nom) \
-    #for ligne in personne.adresse [
-        #capitalise(capitalisation, 2, ligne) \
-    ]
-    #capitalise(capitalisation, 1, personne.commune) \
-    #if not_empty(personne.pays) [
-        #capitalise(capitalisation, 1, personne.pays) \
-    ]
-]
+
+#let bloc_adresse(personne, capitalisation: 0) = {
+    capitalise(capitalisation, 3, personne.nom)
+    linebreak()
+    // personne.adresse may be a simple string or content, convert it to a list
+    if type(personne.adresse) == str or type(personne.adresse) == content {
+        personne.adresse = (personne.adresse,)
+    }
+    for ligne in personne.adresse {
+        capitalise(capitalisation, 2, ligne)
+        linebreak()
+    }
+    capitalise(capitalisation, 1, personne.commune)
+    linebreak()
+    if "pays" in personne and not_empty(personne.pays) {
+        capitalise(capitalisation, 1, personne.pays)
+        linebreak()
+    }
+}
+
 
 #let lettre(
-    expediteur: expediteur,
-    destinataire: destinataire,
+    // expediteur is actually required, see panic below
+    // expected content:
+    // (
+    //     nom: [Prénom Nom],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],                           // optional
+    //     telephone: "01 99 00 67 89",              // optional
+    //     email: "untel@example.com",               // optional
+    //     signature: [Prénom],                      // optional
+    //     image_signature: image("signature.png"),  // optional
+    // )
+    expediteur: none,    // actually required, see panic below
+    // destinataire is actually required, see panic below
+    // expected content:
+    // (
+    //     nom: [Prénom Nom ou Titre],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],  // optional
+    // )
+    destinataire: none,  // actually required, see panic below
+    // intermediaire is really optional
+    // expected content:
+    // (
+    //     nom: [Prénom Nom ou Titre],
+    //     adresse: ([Première ligne], [Deuxième ligne], …),
+    //     commune: [4212 Ville],
+    //     pays: [France],  // optional
+    // )
+    intermediaire: none,
     objet: [],
     date: [],
     lieu: [],
@@ -104,48 +143,20 @@
     capitalisation: 0,
     doc,
 ) = {
-    // Convert legacy sender fields
-    if "prenom" in expediteur {
-        expediteur.nom = [#expediteur.remove("prenom") #smallcaps(expediteur.nom)]
+    // expediteur and destinataire are actually required
+    if expediteur == none {
+        panic("you need to specify a sender (argument 'expediteur')")
     }
-    if "voie" in expediteur {
-        expediteur.adresse = (expediteur.remove("voie"),)
-        if "complement_adresse" in expediteur and not_empty(expediteur.complement_adresse) {
-            expediteur.adresse.push(expediteur.remove("complement_adresse"))
-        }
-    }
-    if "code_postal" in expediteur {
-        expediteur.commune = [#expediteur.remove("code_postal") #expediteur.commune]
-    }
-
-    // Convert legacy recipient fields
-    if "titre" in destinataire {
-        destinataire.nom = destinataire.remove("titre")
-    }
-    if "voie" in destinataire {
-        destinataire.adresse = (destinataire.remove("voie"),)
-        if "complement_adresse" in destinataire and not_empty(destinataire.complement_adresse) {
-            destinataire.adresse.push(destinataire.remove("complement_adresse"))
-        }
-    }
-    if "code_postal" in destinataire {
-        destinataire.commune = [#destinataire.remove("code_postal") #destinataire.commune]
+    if destinataire == none {
+        panic("you need to specify a sender (argument 'destinataire')")
     }
 
     // Set default values for sender optional fields
     // expediteur.nom is required
-    // expediteur.adresse is optional as there exist organization with only a
-    // name and a locality.
-    if "adresse" not in expediteur or is_empty(expediteur.adresse) {
-        expediteur.adresse = ()
-    }
-    // expediteur.adresse may alse be a simple string or content,
-    // convert it to a list
-    else if type(expediteur.adresse) == str or type(expediteur.adresse) == content {
-        expediteur.adresse = (expediteur.adresse,)
-    }
+    // expediteur.adresse is required (but may be an empty list as there exist
+    //     organizations that only have a name and a locality)
     // expediteur.commune is required
-    expediteur.pays = expediteur.at("pays", default: none)
+    // expediteur.pays is optional and handled by bloc_adresse()
     expediteur.telephone = expediteur.at("telephone", default: none)
     expediteur.email = expediteur.at("email", default: none)
     expediteur.signature = expediteur.at(
@@ -161,19 +172,10 @@
 
     // Set default values for recipient-specific optional fields
     // destinataire.nom is required
-    // destinataire.adresse is optional as there exist organization with only a
-    // name and a locality.
-    if "adresse" not in destinataire or is_empty(destinataire.adresse) {
-        destinataire.adresse = ()
-    }
-    // destinataire.adresse may alse be a simple string or content,
-    // convert it to a list
-    else if type(destinataire.adresse) == str or type(destinataire.adresse) == content {
-        destinataire.adresse = (destinataire.adresse,)
-    }
+    // destinataire.adresse is required (but may be an empty list as there exist
+    //     organization that only have a name and a locality)
     // destinataire.commune is required
-    destinataire.pays = destinataire.at("pays", default: none)
-    destinataire.sc = destinataire.at("sc", default: none)
+    // destinataire.pays is optional and handled by bloc_adresse()
 
     // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
     expediteur.bloc_adresse = bloc_adresse(expediteur, capitalisation: capitalisation)
