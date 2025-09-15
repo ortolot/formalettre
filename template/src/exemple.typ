@@ -33,7 +33,7 @@ destinataire: (
 //   commune: [33000 Bordeaux],
 // ),
 lieu: [Camp Germignan],
-objet: [Ceci est un objet de courrier.],
+objet: [Lorem ipsum ?],
 date: [le 7 juin 1559],
 // Décommenter la ligne suivante pour afficher des informations d'envoi suivi
 // ou recommandé
@@ -67,4 +67,4 @@ capitalisation: 0,      // pour passer les adresses en petites capitales ou
 )
 
 // Le corps du document remplace cette fonction
-#lorem(200)
+#lorem(150)
