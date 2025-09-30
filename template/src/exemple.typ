@@ -11,6 +11,13 @@ expediteur: (
   // non des contenus. Ils seront traités pour en faire des liens cliquables.
   telephone: "01 99 00 67 89",
   email: "etienne@laboetie.example",
+  // Coordonnées supplémentaires libres
+  coordonnees: (
+    link("http://www.laboetie.example/", [www.laboetie.example]),
+    [Fédivers : #link(
+      "https://mastodon.example/@la_boétie",
+      [\@la_boetie\@mastodon.example])],
+  )
   // Décommenter la ligne suivante pour utiliser autre chose que le prénom et
   // le nom dans la signature
   // signature: [Étienne],

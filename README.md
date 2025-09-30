@@ -18,8 +18,9 @@ Pour utiliser le template, il est possible de recopier le fichier exemple.
 - `expediteur.adresse` : addresse, sans la commune, sous forme de contenu ou de liste s'il y a plusieurs lignes, **requis**.
 - `expediteur.commune` : code postal et commune de l'expéditeur·ice, **requis**.
 - `expediteur.pays` : pays de l'expéditeur⋅ice, *facultatif*.
--  `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
--  `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
+- `expediteur.telephone` : le numéro de téléphone fourni sera cliquable. *Chaîne de caractères*, *facultatif*.
+- `expediteur.email` : l'email fourni sera affiché en police mono et cliquable. *Chaîne de caractères*, *facultatif*.
+- `expediteur.coordonnees` : coordonnées supplémentaires, par exemple site Web. *Liste de contenus*, *facultatif*.
 - `expediteur.signature` : précise le nom à afficher en signature de fin de lettre. Par défaut, cela reprend le prénom et le nom, *facultatif*.
 - `expediteur.image_signature` : peut être rempli avec un contenu de type `image("signature.png")` pour intégrer l'image d'une signature numérisée. *Facultatif*
 
@@ -84,6 +85,35 @@ Le texte de la lettre proprement dite se situe après la configuration de la let
 
 
 ## Notes
+
+### Téléphone, email et coordonnées
+
+Le numéro de téléphone et l'adresse électronique sont normalement affichés
+directement, mais on peut indiquant un préfixe à afficher en fournissant un
+couple (préfixe, numéro) ou (préfixe, email), par exemple :
+
+```typc
+expediteur: (
+    …,
+    telephone: ([#emoji.phone.classic ], "01 99 00 67 89"),
+    email: ([#emoji.mail ], "etienne@laboetie.example"),
+)
+```
+
+On peut également indiquer des coordonnées supplémentaires en fournissant un
+élément `coordonnees` :
+
+```typc
+expediteur: (
+    …,
+    coordonnees: (
+        link("http://www.laboetie.example/", "www.laboetie.example"),
+        [Fédivers : #link(
+            "https://mastodon.example/@la_boétie",
+             [\@la_boetie\@mastodon.example])],
+    )
+)
+```
 
 ### Signature
 
