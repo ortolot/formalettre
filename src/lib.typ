@@ -187,7 +187,7 @@
     // l'utilisateur peut le préciser sous la forme d'une unique chaîne ou
     // contenu, qu'il faut alors envelopper dans une liste pour correspondre à
     // ce qu'attend le code suivant.
-    if type(expediteur.coordonnees) == str or type(expediteur.coordonnees) = content {
+    if type(expediteur.coordonnees) == str or type(expediteur.coordonnees) == content {
         expediteur.coordonnees = (expediteur.coordonnees,)
     }
 
