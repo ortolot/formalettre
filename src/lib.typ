@@ -183,6 +183,14 @@
     // destinataire.commune is required
     // destinataire.pays is optional and handled by bloc_adresse()
 
+    // S'il y a une seule coordonnée supplémentaire, par exemple un site Web,
+    // l'utilisateur peut le préciser sous la forme d'une unique chaîne ou
+    // contenu, qu'il faut alors envelopper dans une liste pour correspondre à
+    // ce qu'attend le code suivant.
+    if type(expediteur.coordonnees) == str or type(expediteur.coordonnees) = content {
+        expediteur.coordonnees = (expediteur.coordonnees,)
+    }
+
     // Insérer le numéro de téléphone et l'adresse électronique au début des
     // coordonnées de l'expéditeur
     if type(expediteur.email) == str or type(expediteur.email) == content {
@@ -290,7 +298,7 @@
                 } else {
                     bloc_adresse(expediteur)
                 }
-                if expediteur.bloc_coordonnees != none {
+                if expediteur.bloc_coordonnees != [] {
                     par(expediteur.bloc_coordonnees)
                 }
             }),
