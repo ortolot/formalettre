@@ -53,6 +53,24 @@
 }
 
 
+#let lien_tel(numero) = {
+    if type(numero) == str {
+        link("tel:" + numero.replace(" ", "-"), numero)
+    } else {
+        numero
+    }
+}
+
+
+#let lien_email(adresse) = {
+    if type(adresse) == str {
+        link("mailto:" + adresse, raw(adresse))
+    } else {
+        adresse
+    }
+}
+
+
 #let bloc_adresse(personne, capitalisation: 0) = {
     capitalise(capitalisation, 3, personne.nom)
     linebreak()
@@ -146,6 +164,7 @@
     // expediteur.pays is optional and handled by bloc_adresse()
     expediteur.telephone = expediteur.at("telephone", default: none)
     expediteur.email = expediteur.at("email", default: none)
+    expediteur.coordonnees = expediteur.at("coordonnees", default: ())
     expediteur.signature = expediteur.at(
         "signature",
         default: expediteur.nom)
@@ -164,24 +183,26 @@
     // destinataire.commune is required
     // destinataire.pays is optional and handled by bloc_adresse()
 
-    // Bloc d'adresse de l'expéditeur, utilisable pour l'en-tête et l'enveloppe
-    expediteur.bloc_adresse = bloc_adresse(expediteur, capitalisation: capitalisation)
+    // Insérer le numéro de téléphone et l'adresse électronique au début des
+    // coordonnées de l'expéditeur
+    if type(expediteur.email) == str or type(expediteur.email) == content {
+        expediteur.coordonnees.insert(0, ([], lien_email(expediteur.email)))
+    } else if type(expediteur.telephone) == array {
+        expediteur.coordonnees.insert(0, (expediteur.email.at(0), lien_email(expediteur.email.at(1))))
+    }
+    if type(expediteur.telephone) == str or type(expediteur.telephone) == content {
+        expediteur.coordonnees.insert(0, ([], lien_tel(expediteur.telephone)))
+    } else if type(expediteur.telephone) == array {
+        expediteur.coordonnees.insert(0, (expediteur.telephone.at(0), lien_email(expediteur.telephone.at(1))))
+    }
 
     // Bloc de coordonnées de l'expéditeur, utilisées dans l'en-tête
-    if expediteur.telephone == none and expediteur.email == none {
-        expediteur.coordonnees = none
-    }
-    else {
-        expediteur.coordonnees = {
-            if expediteur.telephone != none [
-                tél. : #link(
-                    "tel:"+ expediteur.telephone.replace(" ", "-"),
-                    expediteur.telephone) \
-            ]
-            if expediteur.email != none [
-                email : #link(
-                    "mailto:" + expediteur.email,
-                    raw(expediteur.email)) \
+    expediteur.bloc_coordonnees = {
+        for coordonnee in expediteur.coordonnees {
+            if type(coordonnee) == array [
+                #coordonnee.at(0) #coordonnee.at(1) \
+            ] else if type(coordonnee) == str or type(coordonnee) == content [
+                #coordonnee \
             ]
         }
     }
@@ -269,8 +290,8 @@
                 } else {
                     bloc_adresse(expediteur)
                 }
-                if expediteur.coordonnees != none {
-                    par(expediteur.coordonnees)
+                if expediteur.bloc_coordonnees != none {
+                    par(expediteur.bloc_coordonnees)
                 }
             }),
             grid.cell(colspan: 3,  // place and date
