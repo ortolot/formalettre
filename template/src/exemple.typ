@@ -71,6 +71,11 @@ affranchissement: none, // fournir un code d'affranchissement ou un contenu
 capitalisation: 0,      // pour passer les adresses en petites capitales ou
                         // en majuscules, indiquer un niveau de capitalisation:
                         // 1, 1.5, 2, 2.5, 3 ou 3.5 (cf. README)
+                        //
+numerotation: auto,     // auto: afficher automatiquement les numéros de page
+                        //       lorsqu'il y a plus d'une page
+                        // none: pour jamais afficher de numéro de page
+
 )
 
 // Le corps du document remplace cette fonction
