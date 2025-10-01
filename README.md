@@ -202,3 +202,120 @@ Dans le second cas, les timbres à imprimer ne sont malheureusement pas fournis 
 ```typc
 affranchissement: image("timbre.png"),
 ```
+
+## Préremplissage
+
+Le nom, l'adresse et les coordonnées de l'expéditeur, ainsi que le lieu
+d'expédition, changent peut souvent. Il existe plusieurs possibilités de
+préremplissage pour indiquer _une fois pour toutes_ ces informations.
+
+### Définition de l'expéditeur dans un fichier externe
+
+Typst est capable de charger des données depuis un fichier structuré, par
+exemple en JSON ou YAML. Cela permet d'y définir l'expéditeur :
+
+```yaml
+nom: Étienne de de la Boétie
+adresse: 145 avenue de Germignan
+Commune: 33320 Le Taillan-Médoc
+telephone: 01 99 00 67 89
+email: etienne@laboetie.example
+```
+
+Ce fichier doit être mis à côté de la lettre, et peut y être chargé ainsi :
+
+```typc
+expediteur: yaml("expediteur.yaml")
+```
+
+Cette technique ne permet d'utiliser que de simples chaînes de caractères, sans
+recours à des fonctions Typst.
+
+### Recours à un paquet local
+
+En définissant un [paquet local](https://github.com/typst/packages#local-packages),
+on peut préremplir les arguments de la fonction `lettre` :
+
+```typm
+#import "@preview/formalettre:0.2.0"
+
+#let lettre = formalettre.lettre.with(
+  expediteur: (
+    nom: [Étienne de la Boétie],
+    adresse: [145 avenue de Germignan],
+    commune: [33320 Le Taillan-Médoc],
+    telephone: "01 99 00 67 89",
+    email: "etienne@laboetie.example",
+  ),
+  lieu: [Camp Germignan],
+)
+```
+
+En installant ce paquet local, par exemple sous le nom `localettre`, on peut
+ensuite l'utiliser en omettant l'expéditeur et le lieu :
+
+```typm
+#import "@preview/localettre:0.2.0": *
+
+#show: lettre.with(
+  // Inutile de préciser l'expéditeur ou le lieu, qui sont prédéfinis
+  destinataire: …,
+  date: …,
+  appel: …,
+  salutation: …,
+)
+```
+
+### Recours à un paquet local avec options multiples
+
+Toujours avec un [paquet local](https://github.com/typst/packages#local-packages),
+on peut préremplir les arguments de la fonction `lettre` en fonction d'une
+option :
+
+```
+#import "@preview/formalettre:0.2.0"
+
+#let lettre(option: none, ..args) = {
+  if option == "perso" {
+    formalettre.lettre.with(
+      expediteur: (
+        nom: [Étienne de la Boétie],
+        adresse: [145 avenue de Germignan],
+        commune: [33320 Le Taillan-Médoc],
+        telephone: "01 99 00 67 89",
+        email: "etienne@laboetie.example",
+      ),
+      lieu: [Camp Germignan],
+    )
+  } else if option == "parlement" {
+    formalettre.lettre.with(
+      expediteur: (
+        nom: [Étienne de la Boétie],
+        adresse: ([Parlement de Bordeaux], [Palais de l'Ombrière], [Place du Palais]),
+        commune: [33000 Bordeaux],
+        email: "etienne.de_la_boetie@parlement.bordeaux.example",
+      ),
+      lieu: [Bordeaux],
+    )
+  } else {
+    formalettre.lettre
+  }
+}
+```
+
+En installant ce paquet local, par exemple sous le nom `localettre`, on peut
+ensuite l'utiliser en précisant l'option choisie et en omettant l'expéditeur et
+le lieu :
+
+```typm
+#import "@preview/localettre:0.2.0": *
+
+#show: lettre.with(
+  option: "perso",
+  // Inutile de préciser l'expéditeur ou le lieu, qui sont prédéfinis
+  destinataire: …,
+  date: …,
+  appel: …,
+  salutation: …,
+)
+```
