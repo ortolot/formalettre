@@ -42,6 +42,8 @@ destinataire: (
 lieu: [Camp Germignan],
 objet: [Lorem ipsum ?],
 date: [le 7 juin 1559],
+// Remplacer par la ligne suivante pour utiliser la date du jour
+// date: auto,
 // Décommenter la ligne suivante pour afficher des informations d'envoi suivi
 // ou recommandé
 // envoi: [Lettre suivie numéro XXXXXXXX],
