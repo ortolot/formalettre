@@ -221,10 +221,18 @@
         #bloc_adresse(destinataire, capitalisation: capitalisation)
     ]
 
-    // Numérotation des pages personnalisée avec une fonction
-    set page(numbering: (i, last) => {
-        if numerotation == auto and last > 1 [#numbering("1", i)/#last]
-    })
+    // La numérotation automatique correspond à une fonction de numérotation
+    if numerotation == auto {
+        numerotation = (i, last) => {
+            if last > 1 [#numbering("1", i)/#last]
+        }
+    }
+
+    // Autrement, l'utilisateur peut spécifier comme numérotation n'importe quoi
+    // qui soit pris en charge par Typst pour
+    // <https://typst.app/docs/reference/layout/page/#parameters-numbering>:
+    // `none`, une chaîne de modèle ou une fonction.
+    set page(numbering: numerotation)
 
     //set page(footer: context {
     //    // L'éventuelle enveloppe à imprimer constitue une page, qui doit être
