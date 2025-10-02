@@ -75,6 +75,8 @@ capitalisation: 0,      // pour passer les adresses en petites capitales ou
 numerotation: auto,     // auto: afficher automatiquement les numéros de page
                         //       lorsqu'il y a plus d'une page
                         // none: pour jamais afficher de numéro de page
+                        // chaîne ou fonction: cf.
+                        // <https://typst.app/docs/reference/layout/page/#parameters-numbering>
 
 )
 

@@ -56,7 +56,7 @@ l'enveloppe, si on en imprime une.
 - `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
 - `ps` : permet de préciser un post-scriptum (ou plusieurs), *facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
-- `numerotation` : afficher ou non les numéros de page, `auto` (par défaut) pour numéroter s'il y a plus d'une page, `none` pour ne jamais numéroter. *Facultatif*.
+- `numerotation` : afficher ou non les numéros de page, `auto` (par défaut) pour numéroter s'il y a plus d'une page, `none` pour ne jamais numéroter, chaîne de modèle ou fonction. *Facultatif*.
 
 ```typc
 pj: [
@@ -203,3 +203,20 @@ Dans le second cas, les timbres à imprimer ne sont malheureusement pas fournis 
 ```typc
 affranchissement: image("timbre.png"),
 ```
+
+### Numérotation des pages
+
+Le paramètre `numerotation` est facultatif vaut `auto` par défaut, ce qui
+permet d'afficher le numéro de page et le nombre total de pages _s'il y a plus
+d'une page_.
+
+On peut préciser autre chose, qui sera alors transmis tel quel au paramètre
+[`page(numbering)`](https://typst.app/docs/reference/layout/page/#parameters-numbering).
+En particulier :
+
+* `none`: pas d'affichage des numéros de page,
+* une chaîne comme modèle de numérotation,
+* une fonction de numérotation.
+
+Quel que soit le mode de numérotation choisi, l'éventuelle enveloppe imprimable
+n'est *jamais* numérotée.
