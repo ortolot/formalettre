@@ -157,6 +157,18 @@
         panic("you need to specify a location (argument 'lieu')")
     }
 
+    if date == auto {
+        import "@preview/datify:1.0.0"
+        date = [
+            le
+            #eval(
+                datify.custom-date-format(
+                    datetime.today(), pattern: "long", lang: "fr"
+                ).replace(regex("^1\s"), " 1#super[er] "),
+                mode: "markup")
+        ]
+    }
+
     // Set default values for sender optional fields
     // expediteur.nom is required
     // expediteur.adresse is required (but may be an empty list as there exist
