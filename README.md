@@ -46,7 +46,7 @@ l'enveloppe, si on en imprime une.
 ### Lettre
 
 - `objet` : l'objet du courrier, *facultatif*.
-- `date` : date à indiquer sous forme libre, **requis**.
+- `date` : date à indiquer sous forme libre (avec l'article, par exemple `[le 1#super[er] janvier 1970]`), ou `auto` pour utiliser la date du jour. **Requis**.
 - `lieu` : lieu de rédaction, **requis**.
 - `envoi` : informations d'envoi, par exemple « Recommandé avec accusé de réception numéro XXXXXXXX », *facultatif*.
 - `ref` : référence du courrier, *facultatif*.
