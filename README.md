@@ -56,6 +56,7 @@ l'enveloppe, si on en imprime une.
 - `salutation` : formule de salutation, autrement dit formule finale, désactivée par défaut. *Facultatif*.
 - `ps` : permet de préciser un post-scriptum (ou plusieurs), *facultatif*.
 - `pj` : permet d'indiquer la présence de pièces jointes.  Il est possible d'en faire une liste, par exemple :
+- `numerotation` : afficher ou non les numéros de page, `auto` (par défaut) pour numéroter s'il y a plus d'une page, `none` pour ne jamais numéroter. *Facultatif*.
 
 ```typc
 pj: [

@@ -140,6 +140,7 @@
     enveloppe: none,
     affranchissement: none,
     capitalisation: 0,
+    numerotation: auto,
     doc,
 ) = {
     // expediteur and destinataire are actually required
@@ -231,6 +232,20 @@
     destinataire.bloc_adresse = [
         #bloc_adresse(destinataire, capitalisation: capitalisation)
     ]
+
+    // Numérotation des pages personnalisée avec une fonction
+    set page(numbering: (i, last) => {
+        if numerotation == auto and last > 1 [#numbering("1", i)/#last]
+    })
+
+    //set page(footer: context {
+    //    // L'éventuelle enveloppe à imprimer constitue une page, qui doit être
+    //    // retirée du total.
+    //    let pages = counter(page).final().at(0) - int(enveloppe != none)
+    //    if numerotation == auto and pages > 1 {
+    //        align(center, [#counter(page).display("1")/#pages])
+    //    }
+    //})
 
     // An windowed enveloppe looks like this:
     //         20 mm 60 mm              140 mm
@@ -492,9 +507,13 @@
         let format = parse_format(enveloppe)
 
         pagebreak()
-
+        // Le numéro de page vient d'être incrémenté. On le décrémente pour
+        // éviter de compter cette enveloppe imprimée dans le total des pages.
+        counter(page).update(n => n - 1)
         set page(
-            width: format.width, height: format.height)
+            width: format.width, height: format.height,
+            numbering: none,
+        )
 
         // Set text size to an appropriate value for the chosen envelope
         // size. It must grow with the envelope size, but not too much
